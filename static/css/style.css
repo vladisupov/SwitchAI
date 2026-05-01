@@ -1,19 +1,27 @@
 h1, h4 {
     text-align: center;
 }
-.navbar-nav{
-    display: inline;
+.container-fluid{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: auto;
+    position: relative;
 }
 #register-btn{
     background-color: #00E6FF;
-    border: none;
+    border: 1px solid #00E6FF;
+    border-radius: 10px;
     color: black;
     box-shadow: 0 0 7px #00E6FF;
     transition: transform 0.3s ease;
+    font-family: 'Manrope', sans-serif;
 }
 #login-btn{
+    font-family: 'Manrope', sans-serif;
     background-color: #76ff03;
-    border: none;
+    border: 1px solid #76ff03;
+    border-radius: 10px;
     color: black;
     box-shadow: 0 0 7px #76ff03;
     transition: transform 0.3s ease;
@@ -21,10 +29,89 @@ h1, h4 {
 #login-btn:hover{
     background-color: #67e302;
     box-shadow: 0 0 7px #67e302;
+    border: 1px solid #67e302;
+    border-radius: 10px;
     transform: scale(1.05);
 }
 #register-btn:hover{
     background-color: #03d1e8;
     box-shadow: 0 0 7px #03d1e8;
+    border: 1px solid #03d1e8;
+    border-radius: 10px;
     transform: scale(1.05);
+}
+.bg-image{
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+}
+.nav-link{
+    color: black;
+    font-family: 'Manrope', sans-serif;
+}
+.main-content{
+    background-image: url(img/bacfgroung\ image.png);
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+}
+.container{
+    color: white;
+}
+.submit-reg-btn{
+    background-color: #00E6FF;
+    border: 1px solid #00E6FF;
+    border-radius: 15px;
+    color: black;
+    box-shadow: 0 0 7px #00E6FF;
+    transition: transform 0.3s ease;
+    font-family: 'Manrope', sans-serif;
+    height: 70px;
+    width: 300px;
+}
+.submit-reg-btn:hover{
+    background-color: #03d1e8;
+    box-shadow: 0 0 7px #03d1e8;
+    border: 1px solid #03d1e8;
+    border-radius: 15px;
+    transform: scale(1.1);
+}
+.submit-reg-div{
+    text-align: center;
+}
+.reg-div{
+    color: black;
+    display: flex;
+    flex-direction: column;
+}
+.main-reg{
+    text-align: center;
+    color: black;
+}
+.form-control{
+    width: 30vw;
+}
+.reg-form{
+    display: flex;
+    justify-content: center;
+}
+.submit-log-btn{
+    font-family: 'Manrope', sans-serif;
+    background-color: #76ff03;
+    border: 1px solid #76ff03;
+    border-radius: 15px;
+    color: black;
+    box-shadow: 0 0 7px #76ff03;
+    transition: transform 0.3s ease;
+    height: 70px;
+    width: 300px;
+}
+.submit-log-btn:hover{
+    background-color: #67e302;
+    box-shadow: 0 0 7px #67e302;
+    border: 1px solid #67e302;
+    border-radius: 15px;
+    transform: scale(1.1);
 }
