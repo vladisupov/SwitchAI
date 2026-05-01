@@ -10,21 +10,26 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
-                <img src="/static/img/logo%20SwitchAIpng.png" alt="SwitchAI logo" width="150" height="80">
+                <img src="/static/img/logo%20SwitchAIpng.png" alt="SwitchAI logo">
             </a>
-            <a class="nav-link active" aria-current="page" href="/">Главная</a>
-            <a class="nav-link" href="#">Нейросети</a>
-            <a class="nav-link" href="#">О нас</a>
-            <a class="nav-link" href="#">Контакты</a>
-            {% if current_user.is_authenticated %}
-                <a class="navbar-brand" href="/logout">{{ current_user.name }} {{ current_user.surname }}</a>
-            {% else %}
-                <a class="btn btn-primary" id="register-btn" href="/register">Регистрация</a>
-                <a class="btn btn-success" id="login-btn" href="/login">Вход</a>
-            {% endif %}
+
+            <div class="navbar-nav">
+                <a class="nav-link active" href="/">Главная</a>
+                <a class="nav-link" href="#">Нейросети</a>
+                <a class="nav-link" href="#">О нас</a>
+            </div>
+
+            <div class="navbar-buttons">
+                {% if current_user.is_authenticated %}
+                    <a class="navbar-brand" href="/logout">{{ current_user.name }} {{ current_user.surname }}</a>
+                {% else %}
+                    <a class="btn" id="register-btn" href="/register">Регистрация</a>
+                    <a class="btn" id="login-btn" href="/login">Вход</a>
+                {% endif %}
+            </div>
         </div>
     </nav>
 </header>
