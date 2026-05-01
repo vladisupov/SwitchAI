@@ -1,0 +1,30 @@
+h1, h4 {
+    text-align: center;
+}
+.navbar-nav{
+    display: inline;
+}
+#register-btn{
+    background-color: #00E6FF;
+    border: none;
+    color: black;
+    box-shadow: 0 0 7px #00E6FF;
+    transition: transform 0.3s ease;
+}
+#login-btn{
+    background-color: #76ff03;
+    border: none;
+    color: black;
+    box-shadow: 0 0 7px #76ff03;
+    transition: transform 0.3s ease;
+}
+#login-btn:hover{
+    background-color: #67e302;
+    box-shadow: 0 0 7px #67e302;
+    transform: scale(1.05);
+}
+#register-btn:hover{
+    background-color: #03d1e8;
+    box-shadow: 0 0 7px #03d1e8;
+    transform: scale(1.05);
+}
