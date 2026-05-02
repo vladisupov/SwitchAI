@@ -2,11 +2,77 @@
 
 {% block content %}
 <meta charset="UTF-8">
+
+<style>
+    .main-content{
+        background-image: url(/static/img/background%20image.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        max-width: 100%;
+        min-width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+    .begin-container{
+        color: white;
+        width: 100%;
+        text-align: left;
+        padding-left: 10vw;
+        padding-right: 0;
+        padding-top: 10vh;
+        margin-top: 0;
+        font-size: 1em;
+    }
+    .begin-container p{
+        font-size: 1.5em;
+    }
+    .begin-container h1{
+        font-size: 2.5em;
+    }
+    .container{
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    #begin-btn{
+        background-color: #00E6FF;
+        border: 1px solid #00E6FF;
+        border-radius: 10px;
+        color: black;
+        box-shadow: 0 0 7px #00E6FF;
+        transition: transform 0.3s ease;
+        font-family: 'Manrope', sans-serif;
+        width: 15vw;
+        max-width: 150px;
+        min-width: 50px;
+        height: 5vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+    }
+    @media (hover: hover){
+        #begin-btn:hover{
+        background-color: #03d1e8;
+        box-shadow: 0 0 7px #03d1e8;
+        border: 1px solid #03d1e8;
+        border-radius: 10px;
+        transform: scale(1.05);
+    }
+}
+    
+</style>
 <div class="main-content">
     <div class="begin-container">
         <h1>Переключай ИИ – получай ответ</h1>
         <p>Погрузись в мир нейросетей прямо сейчас</p>
         <a class="btn" id="begin-btn" href="/begin">Начать</a>
+    </div>
+    <div class="top-neuro">
+        
     </div>
 </div>
 {% endblock %}

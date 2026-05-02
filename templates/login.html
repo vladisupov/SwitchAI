@@ -1,38 +1,148 @@
 {% extends "base.html" %}
-
 {% block content %}
-    <div class="main-reg">
-        <img src="/static/img/logo%20SwitchAIpng.png" width="350" height="180">
-        <h2>Вход</h2>
-    </div>
-    <form action="" method="post" class="reg-form">
-        {{ form.hidden_tag() }}
-        <div class="reg-div">
-            <p>
-            {{ form.email.label }}<br>
-            {{ form.email(class="form-control", type="email") }}<br>
+<style>
+    .submit-log-btn {
+        font-family: 'Manrope', sans-serif;
+        background-color: #76ff03;
+        border: 1px solid #76ff03;
+        border-radius: 15px;
+        color: black;
+        box-shadow: 0 0 7px #76ff03;
+        transition: transform 0.3s ease;
+        height: 70px;
+        width: 300px;
+        cursor: pointer;
+        font-weight: 800;
+    }
+    @media (hover : hover){
+        .submit-log-btn:hover {
+            filter: brightness(90%);
+            border-radius: 15px;
+            transform: scale(1.1);
+        }
+    }
+    .form-control {
+        width: 100%;
+        padding: 12px 40px 12px 12px;
+        border-radius: 8px;
+        background: #f5f9fa;
+        border: 1px solid black;
+        color: black;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .form-control:focus {
+        border-color: #ffffff34;
+    }
+    .password-wrapper {
+        position: relative;
+    }
+    .eye-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        z-index: 3;
+    }
+    @media (hover: hover){
+        .eye-toggle:hover {
+            color: #76ff03;
+        }
+    }
+    .main-reg {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        color: black;
+    }
+    .reg-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        color: black;
+    }
+    .alert-danger {
+        color: #ff4d4d;
+        font-size: 0.8rem;
+        margin-top: 5px;
+    }
+    .remember-me-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 15px 0;
+    }
+</style>
+<div class="main-reg">
+    <img src="/static/img/logo%20SwitchAIpng.png" width="350" height="132" alt="Logo">
+    <h2 style="font-weight: 800; margin-top: 30px;">Вход</h2>
+</div>
+<form action="" method="post" class="reg-form">
+    {{ form.hidden_tag() }}
+
+    <div class="space-y-4">
+        <!-- Email -->
+        <p>
+            {{ form.email.label(class="block text-sm font-medium mb-1") }}
+            {{ form.email(class="form-control", type="email", placeholder="email@example.com") }}
             {% for error in form.email.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
             {% endfor %}
-            </p>
-            <p>
-                {{ form.password.label }}<br>
-                {{ form.password(class="form-control", type="password") }}<br>
-                {% for error in form.password.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ error }}
-                    </div>
-                {% endfor %}
-            </p>
-            <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-            <div class="submit-reg-div">
-                <p>{{ form.submit(type="submit", class="submit-log-btn") }}</p>
+        </p>
+        <!-- Password -->
+        <p>
+            {{ form.password.label(class="block text-sm font-medium mb-1") }}
+            <div class="password-wrapper">
+                {{ form.password(class="form-control", type="password", id="password", placeholder="Введите пароль") }}
+                <button type="button" class="eye-toggle" onclick="togglePassword('password', this)">
+                    <i data-lucide="eye"></i>
+                </button>
             </div>
-            <div>
+            {% for error in form.password.errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endfor %}
+        </p>
+        <!-- Remember Me -->
+        <div class="remember-me-container">
+            {{ form.remember_me() }}
+            {{ form.remember_me.label(class="text-sm cursor-pointer") }}
+        </div>
+        <div class="flex justify-center pt-4">
+            {{ form.submit(type="submit", class="submit-log-btn") }}
+        </div>
+        {% if message %}
+            <div class="text-center mt-4 text-red-500">
                 {{ message }}
             </div>
+        {% endif %}
+        <div class="dont-have-account">
+            <p>Нет аккаунта?</p>
+            <a href="/register">Зарегистрироваться</a>
         </div>
-    </form>
+    </div>
+</form>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    lucide.createIcons();
+    function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+        const icon = button.querySelector('i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.setAttribute('data-lucide', 'eye-off');
+        } else {
+            input.type = 'password';
+            icon.setAttribute('data-lucide', 'eye');
+        }
+        lucide.createIcons();
+    }
+</script>
 {% endblock %}

@@ -1,64 +1,169 @@
 {% extends "base.html" %}
-
 {% block content %}
+<style>
+    .submit-reg-btn {
+        background-color: #00E6FF;
+        border: 1px solid #00E6FF;
+        border-radius: 15px;
+        color: black;
+        box-shadow: 0 0 7px #00E6FF;
+        transition: all 0.3s ease;
+        font-weight: 800;
+        cursor: pointer;
+        height: 70px;
+        width: 100%;
+        max-width: 300px;
+    }
+    @media (hover: hover){
+        .submit-reg-btn:hover {
+            filter: brightness(90%);
+            transform: scale(1.1);
+        }
+    }
+    .form-control {
+        width: 100%;
+        padding: 12px 40px 12px 12px;
+        border-radius: 8px;
+        background: #f5f9fa;
+        border: 1px solid black;
+        color: white;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .form-control:focus {
+        border-color: #00E6FF;
+    }
+    .password-wrapper {
+        position: relative;
+    }
+    .eye-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #5c6470;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        z-index: 3;
+    }
+    @media (hover: hover){
+        .eye-toggle:hover {
+            color: #00E6FF;
+        }
+    }
+    .main-reg {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+    .reg-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .alert-danger {
+        color: #ff4d4d;
+        font-size: 0.8rem;
+        margin-top: 5px;
+    }
+</style>
 <div class="main-reg">
-    <img src="/static/img/logo%20SwitchAIpng.png" width="350" height="180">
-    <h2>Регистрация</h2>
+    <img src="/static/img/logo%20SwitchAIpng.png" width="350" height="132" alt="Logo">
+    <h2 style="font-weight: 800; margin-top: 30px;">Регистрация</h2>
 </div>
-
 <form action="" method="post" class="reg-form">
     {{ form.hidden_tag() }}
-    {{ form.csrf_token }}
-    <div class="reg-div">
+
+    <div class="space-y-4">
+        <!-- Email -->
         <p>
-        {{ form.email.label }}<br>
-        {{ form.email(class="form-control", type="email") }}<br>
-        {% for error in form.email.errors %}
-        <p class="alert alert-danger" role="alert">
-            {{ error }}
+            {{ form.email.label(class="block text-sm font-medium mb-1") }}
+            {{ form.email(class="form-control", type="email", placeholder="email@example.com") }}
+            {% for error in form.email.errors %}
+                <span class="alert alert-danger">{{ error }}</span>
+            {% endfor %}
         </p>
-        {% endfor %}
-        </p>
+        <!-- Password -->
         <p>
-            {{ form.password.label }}<br>
-            {{ form.password(class="form-control", type="password") }}<br>
+            {{ form.password.label(class="block text-sm font-medium mb-1") }}
+            <div class="password-wrapper">
+                {{ form.password(class="form-control", type="password", id="password", placeholder="Введите пароль") }}
+                <button type="button" class="eye-toggle" onclick="togglePassword('password', this)">
+                    <i data-lucide="eye"></i>
+                </button>
+            </div>
             {% for error in form.password.errors %}
-        <p class="alert alert-danger" role="alert">
-            {{ error }}
+                <span class="alert alert-danger">{{ error }}</span>
+            {% endfor %}
         </p>
-        {% endfor %}
-        </p>
+        <!-- Password Again -->
         <p>
-            {{ form.password_again.label }}<br>
-            {{ form.password_again(class="form-control", type="password") }}<br>
+            {{ form.password_again.label(class="block text-sm font-medium mb-1") }}
+            <div class="password-wrapper">
+                {{ form.password_again(class="form-control", type="password", id="password_again", placeholder="Повторите пароль") }}
+                <button type="button" class="eye-toggle" onclick="togglePassword('password_again', this)">
+                    <i data-lucide="eye"></i>
+                </button>
+            </div>
             {% for error in form.password_again.errors %}
-        <p class="alert alert-danger" role="alert">
-            {{ error }}
+                <span class="alert alert-danger">{{ error }}</span>
+            {% endfor %}
         </p>
-        {% endfor %}
-        </p>
+        <!-- Surname -->
         <p>
-            {{ form.surname.label }}<br>
-            {{ form.surname(class="form-control") }}<br>
+            {{ form.surname.label(class="block text-sm font-medium mb-1") }}
+            {{ form.surname(class="form-control", placeholder="Фамилия") }}
             {% for error in form.surname.errors %}
-        <p class="alert alert-danger" role="alert">
-            {{ error }}
+                <span class="alert alert-danger">{{ error }}</span>
+            {% endfor %}
         </p>
-        {% endfor %}
-        </p>
+        <!-- Name -->
         <p>
-            {{ form.name.label }}<br>
-            {{ form.name(class="form-control") }}<br>
+            {{ form.name.label(class="block text-sm font-medium mb-1") }}
+            {{ form.name(class="form-control", placeholder="Имя") }}
             {% for error in form.name.errors %}
-        <p class="alert alert-danger" role="alert">
-            {{ error }}
+                <span class="alert alert-danger">{{ error }}</span>
+            {% endfor %}
         </p>
-        {% endfor %}
-        </p>
-        <div class="submit-reg-div">
-            <p>{{ form.submit(type="submit", class="submit-reg-btn") }}</p>
+        <div class="flex justify-center pt-6">
+            {{ form.submit(type="submit", class="submit-reg-btn") }}
         </div>
-        {{message}}
+        {% if message %}
+            <div class="text-center mt-4 text-red-500">
+                {{ message }}
+            </div>
+        {% endif %}
+        <div class="dont-have-account">
+            <p>Уже есть аккаунт?</p>
+            <a href="/login">Войти</a>
+        </div>
     </div>
+
 </form>
+<!-- Подключаем Lucide для иконок -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    // Инициализация иконок
+    lucide.createIcons();
+    function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+        const icon = button.querySelector('i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.setAttribute('data-lucide', 'eye-off');
+        } else {
+            input.type = 'password';
+            icon.setAttribute('data-lucide', 'eye');
+        }
+
+        // Перерисовываем иконки Lucide
+        lucide.createIcons();
+    }
+</script>
 {% endblock %}
