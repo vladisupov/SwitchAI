@@ -76,6 +76,11 @@ def reqister():
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
+@app.route('/neuro')
+def neuro():
+    db_sess = db_session.create_session()
+    return render_template('neuro.html', title='Нейросети')
+
 
 
 if __name__ == '__main__':

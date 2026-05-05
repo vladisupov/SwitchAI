@@ -1,0 +1,486 @@
+{% extends "base.html" %}
+
+{% block content %}
+<meta charset="UTF-8">
+<style>
+    /* .left-menu{
+        display: flex;
+        background-color: rgb(246, 242, 242);
+        width: 35%;
+        max-width: 350px;
+        min-width: 150px;
+        height: 100vh;
+        flex-direction: column;
+        justify-content: flex-start;
+        left: 0;
+        margin: 0;
+        padding-top: 30px;
+        align-items: flex-start;
+    }
+    .neuro-search{
+        background-color: white;
+        border: 1px solid #c5c5c5;
+        border-radius: 10px;
+        height: 35px;
+        width: 85%;
+        margin-left: 7.5%;
+        margin-bottom: 10px;
+    }
+    .neuro-search:focus{
+        border: 3px solid #00E6FF !important;
+        outline: none;
+    }
+    .dropdown{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 100%;
+        margin-top: 10px;
+    }
+    .dropdown a{
+        margin-left: 7.5%;
+        color: black;
+        font-weight: 800;
+        font-size: 1.5rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+    .dropdown-list{
+        position: absolute;
+        padding: 1rem;
+        margin-left: 7.5%;
+        margin-top: 2rem;
+        display: none;
+    }
+    .dropdown-list li{
+        list-style: none;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+    }
+    .dropdown:hover .dropdown-list{
+        display: block;
+    }
+    .dropdown-icon{
+        position: relative;
+        transform: rotate(0deg);
+        transition: 0.3s ease;
+    }
+    @media (hover: hover){
+        .dropdown:hover .dropdown-icon{
+            transform: rotate(180deg);
+        }
+    } */
+    .background-img{
+        background: url(/static/img/background_neuro.png) no-repeat;   /* Задний фон */
+        background-size: cover;
+        background-position: center;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+    }
+    .neuro-part{                                                    /* Главная часть (div для всего конетнта на странице) */
+        color: white;
+        font-weight: 800;
+        display: flex;
+        flex-direction: column;
+        margin: 20px 3rem;
+        width: 100%;
+    }
+    .neuro-part h1{
+        font-size: 2.5rem;
+    }
+    .request-div{                                                   /* div для промпта и параметров */
+        display: flex;
+        flex-direction: row;
+        border: 2px solid #2d3a53;
+        border-radius: 10px;
+        width: auto;
+        height: 500px;
+        margin-top: 20px;
+    }
+    .prompt-div{
+        background-color: #152542;
+        width: 60%;
+        height: 100%;
+        /* display: flex; */
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 0.5rem 1rem;
+        border-radius: 10px 0 0 10px;
+    }
+    .prompt-div p{
+        font-size: 1.5rem;
+        font-weight: 800;
+    }
+    .prompt-area{                                                   /* textarea для промпта */
+        outline: none;
+        border: 1px solid #c5c5c5;
+        box-shadow: 0 0 7px #c5c5c5;
+        border-radius: 10px;
+        width: 100%;
+        height: 85%;
+        text-align: start;
+        justify-content: flex-start;
+        color: #c5c5c5;
+        background-color: #2d3a53;
+    }
+    .prompt-area:focus{
+        outline: none;
+        border: 3px solid #00E6FF;
+        box-shadow: 0 0 7px #00E6FF;
+    }
+    .params-div{                                                        /* параметры */
+        background-color: #2d3a53;
+        width: 40%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 0.5rem 1rem;
+        border-radius: 0 10px 10px 0;
+    }
+    .params-div p{
+        font-size: 1.5rem;
+        font-weight: 800;
+    }
+    .generate-btn{                                                  /* кнопка сгенерировать */
+        width: auto;
+        height: 15%;
+        align-items: center;
+        justify-content: center;
+        background-color: #76ff03;
+        border: 1px solid #76ff03;
+        border-radius: 15px;
+        color: black;
+        box-shadow: 0 0 7px #76ff03;
+        font-weight: 800;
+        transition: 0.3s ease;
+    }
+    @media (hover: hover){
+        .generate-btn:hover{
+            transform: scale(1.05);
+        }
+    }
+    .neuro-choice{                                                      /* Выбор нейросети */
+        width: auto;
+        height: 300px;
+        margin-top: 20px;
+        background-color: #152542;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 0.5rem 1rem;
+        border: 1px solid #2d3a53;
+        border-radius: 10px;        
+    }
+    .neuro-choice p{
+        font-weight: 800;
+        font-size: 1rem;
+        margin-bottom: 10px;
+        padding: 0;
+    }
+    .choice-part{                                                       /* div для списка нейросетей и описания*/
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+    }   
+    .neuro-dropdown{                                                    /* dropdown для выбора нейросети */
+        background-color: #2d3a53;
+        border: 1px solid #c5c5c5;
+        box-shadow: 0 0 7px #c5c5c5;
+        border-radius: 10px;
+        outline: none;
+        width: 40%;
+        height: 40px;
+        color: #c5c5c5;
+        margin: 20px 5px;
+    }            
+    .neuro-dropdown:focus{
+        outline: none;
+        border: 1px solid #00E6FF;
+        box-shadow: 0 0 7px #00E6FF;
+    }
+    .description-area{                                                  /* textarea для описания выбранной нейросети */
+        background-color: #2d3a53;
+        border: 1px solid #c5c5c5;
+        box-shadow: 0 0 7px #c5c5c5;
+        border-radius: 10px;
+        width: 60%;
+        height: calc(100% - 40px);
+        color: #c5c5c5;
+        margin: 20px 5px;
+    }                                                          
+    @media (max-width: 800px){                                          /* Стили для экрана <= 800px */
+        .params-div p{
+            font-size: 1rem;
+            font-weight: 800;
+        }
+        .prompt-div p{
+            font-size: 1rem;
+            font-weight: 800;
+        }
+        .neuro-part h1{
+            font-size: 1.5rem;
+        }
+        .dropdown a{
+            margin-left: 7.5%;
+            color: black;
+            font-weight: 800;
+            font-size: 1rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        .generate-btn{
+            width: auto;
+            height: 15%;
+            align-items: center;
+            justify-content: center;
+            background-color: #76ff03;
+            border: 1px solid #76ff03;
+            border-radius: 15px;
+            color: black;
+            box-shadow: 0 0 7px #76ff03;
+            font-weight: 800;
+            transition: 0.3s ease;
+            font-size: 0.7rem;
+        }
+    }
+    .response-div{                                                          /* div для ответа нейросети */
+        background-color: #152542;
+        display: flex;
+        flex-direction: column;
+        border: 2px solid #2d3a53;
+        border-radius: 10px;
+        width: auto;
+        height: 500px;
+        margin-top: 10px;
+        padding: 0;
+    }
+    .response-div p {
+        margin: 0.5rem 1rem;
+        font-size: 1rem;
+        font-weight: 800;
+    }
+    .generated-text{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #152542;
+        width: 100%;
+        height: 80%;
+        padding: 0.5rem 1rem;
+    }
+    .generated-text-area {                                                  /* textarea для сгенерированного тектса */                                   
+        outline: none;
+        border: 1px solid #c5c5c5;
+        box-shadow: 0 0 7px #c5c5c5;
+        border-radius: 10px;
+        width: 100%;
+        height: 100%;
+        text-align: start;
+        color: #c5c5c5;
+        background-color: #2d3a53;
+    }
+    @media (max-width: 600px){                                                  /* стили для телефонов(экран <= 600px) */
+        .neuro-part{
+            color: white;
+            font-weight: 800;
+            display: flex;
+            flex-direction: column;
+            margin: 10px auto;
+            width: 80vw;
+        }
+        .neuro-part h1{
+            font-size: 20px;
+        }
+        .request-div{
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #2d3a53;
+            border-radius: 10px;
+            width: auto;
+            height: 500px;
+            margin-top: 20px;
+        }
+        .prompt-div{
+            background-color: #152542;
+            width: 100%;
+            height: 160%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 0.5rem 0.5rem;
+            border-radius: 10px 10px 0 0;
+        }
+        .prompt-div p{
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .prompt-area{
+            outline: none;
+            border: 1px solid #c5c5c5;
+            box-shadow: 0 0 7px #c5c5c5;
+            border-radius: 10px;
+            width: 100%;
+            height: 85%;
+            text-align: start;
+            justify-content: flex-start;
+        }
+        .prompt-area:focus{
+            outline: none;
+            border: 3px solid #00E6FF;
+            box-shadow: 0 0 7px #00E6FF;
+        }
+        .params-div{
+            background-color: #2d3a53;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 0.5rem 0.5rem;
+            border-radius: 0 0 10px 10px;
+        }
+        .params-div p{
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .generate-btn{
+            width: calc(100% - 1rem);
+            height: 30%;
+            align-items: center;
+            justify-content: center;
+            background-color: #76ff03;
+            border: 1px solid #76ff03;
+            border-radius: 15px;
+            color: black;
+            box-shadow: 0 0 7px #76ff03;
+            font-weight: 800;
+            transition: 0.3s ease;
+            font-size: 12px;
+        }
+        .generate-btn:active{
+            filter: brightness(85%);
+        }
+        .response-div p {
+            margin: 0.5rem 0.5rem;
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .neuro-choice{                                                      /* Выбор нейросети */
+            width: auto;
+            height: 400px;
+            margin-top: 20px;
+            background-color: #152542;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 0.5rem 0.5rem;
+            border: 1px solid #2d3a53;
+            border-radius: 10px;        
+        }
+        .neuro-choice p{
+            font-weight: 800;
+            font-size: 12px;
+            margin-bottom: 10px;
+            padding: 0;
+        }
+        .choice-part{                                                       /* div для списка нейросетей и описания*/
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }   
+        .neuro-dropdown{                                                    /* dropdown для выбора нейросети */
+            background-color: #2d3a53;
+            border: 1px solid #c5c5c5;
+            box-shadow: 0 0 7px #c5c5c5;
+            border-radius: 10px;
+            outline: none;
+            width: calc(100% - 10px);
+            height: 40px;
+            color: #c5c5c5;
+            margin: 20px 5px;
+        }            
+        .neuro-dropdown:focus{
+            outline: none;
+            border: 1px solid #00E6FF;
+            box-shadow: 0 0 7px #00E6FF;
+        }
+        .description-area{                                                  /* textarea для описания выбранной нейросети */
+            background-color: #2d3a53;
+            border: 1px solid #c5c5c5;
+            box-shadow: 0 0 7px #c5c5c5;
+            border-radius: 10px;
+            width: calc(100% - 10px);
+            height: calc(100% - 80px);
+            color: #c5c5c5;
+            margin: 20px 5px;
+        }
+    }
+</style>
+<div class="background-img">
+    <!-- <div class="left-menu">
+        <div class="dropdown">
+            <a href="#">Модели
+                <span class="material-symbols-outlined dropdown-icon">
+                    keyboard_arrow_down
+                </span>
+            </a>
+            <ul class="dropdown-list">
+                <li>Модель 1</li>
+                <li>Модель 2</li>
+                <li>Модель 3</li>
+            </ul>
+        </div>
+    </div> -->
+    <div class="neuro-part">
+        <h1>SwitchAI — переключи реальность</h1>
+        <div class="neuro-choice">
+            <p>Выбор нейросети</p>
+            <div class="choice-part">
+                <select class="neuro-dropdown" id="neuro-dropdown" onchange="UpdateTextarea()">
+                    <option value="1">model 1</option>
+                    <option value="2">model 2</option>
+                    <option value="3">model 3</option>
+                </select>
+                <textarea disabled class="description-area" id="description-area"></textarea>
+            </div>
+        </div>
+        <div class="request-div">
+            <div class="prompt-div">
+                <p>Ваш промт</p>
+                <textarea class="prompt-area" id="prompt-area" placeholder="Опишите вашу задачу или задайте вопрос"></textarea>
+            </div>
+            <div class="params-div">
+                <p>Параметры</p>
+                <button class="generate-btn">Сгенерировать</button>
+            </div>
+        </div>
+        <div class="response-div">
+            <p>Сгенерированный текст</p>
+            <div class="generated-text">
+                <textarea disabled class="generated-text-area" id="genereted-text-area" placeholder="Напиши запрос и здесь появится ответ нейросети"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    UpdateTextarea();
+    function UpdateTextarea(){
+        const selected_value = document.getElementById('neuro-dropdown').value;
+        const textarea = document.getElementById('description-area');
+        const neuro_descriptions = [
+            "Описание первой модели",
+            "Описание второй модели",
+            "Описание третьей модели"
+        ];
+        textarea.textContent = neuro_descriptions[selected_value - 1];
+    }
+</script>
+{% endblock %}
