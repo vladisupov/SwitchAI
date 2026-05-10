@@ -30,7 +30,7 @@ def api_neuro():
     if not request.json:  # Проверка правильности запроса
         return make_response(jsonify({'error': 'Empty request'}), 400)
     elif not all(key in request.json for key in
-                 ['user_mail', 'model', 'prompt']):
+                 ['user_email', 'model', 'prompt']):
         return make_response(jsonify({'error': 'Bad request'}), 400)
     data = request.json
     user_prompt = data.get('prompt', '')

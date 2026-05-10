@@ -35,6 +35,6 @@ response = post('http://127.0.0.1:8080/api/neuro',
                 json={
                     'model': 'nvidia/nemotron-3-super-120b-a12b:free',
                     'prompt': 'Ответь одним словом. Месси или Роналду',
-                    'user_mail': 'vlad.isupov.09@mail.ru'
+                    'user_email': 'vlad.isupov.09@mail.ru'
                 })
 print(response.json())
