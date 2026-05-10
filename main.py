@@ -9,6 +9,7 @@ import os
 from data import neuro_api
 from dotenv import load_dotenv
 from flask import make_response
+from data.ai_responses import Responses
 
 load_dotenv()
 
@@ -132,6 +133,15 @@ def neuro_request():
         result = response.json()
 
         ai_message = result['output'][1]['content'][0]['text']
+        ai_response = Responses(
+            user_id=User.id,
+            model=model,
+            prompt=user_prompt,
+            response=ai_message,
+        )
+        db_sess = db_session.create_session()
+        db_sess.add(ai_response)
+        db_sess.commit()
         return jsonify({'message': ai_message})
 
     except Exception as e:

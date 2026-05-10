@@ -10,7 +10,8 @@ class Responses(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'ai_responses'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'))
-    request = sqlalchemy.Column(sqlalchemy.String)
+    model = sqlalchemy.Column(sqlalchemy.String)
+    prompt = sqlalchemy.Column(sqlalchemy.String)
     response = sqlalchemy.Column(sqlalchemy.String)
     response_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
 
