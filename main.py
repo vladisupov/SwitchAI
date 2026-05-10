@@ -132,17 +132,22 @@ def neuro_request():
         response.raise_for_status()
         result = response.json()
 
-        ai_message = result['output'][1]['content'][0]['text']
-        ai_response = Responses(
-            user_id=User.id,
-            model=model,
-            prompt=user_prompt,
-            response=ai_message,
-        )
-        db_sess = db_session.create_session()
-        db_sess.add(ai_response)
-        db_sess.commit()
-        return jsonify({'message': ai_message})
+        print(result)
+        print(result['output'])
+        try:
+            ai_message = result['output'][1]['content'][0]['text']
+            ai_response = Responses(
+                user_id=current_user.id,
+                model=model,
+                prompt=user_prompt,
+                response=ai_message,
+            )
+            db_sess = db_session.create_session()
+            db_sess.add(ai_response)
+            db_sess.commit()
+            return jsonify({'message': ai_message})
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
 
     except Exception as e:
         print(str(e))

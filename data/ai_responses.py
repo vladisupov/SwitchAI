@@ -4,6 +4,7 @@ from flask_login import UserMixin
 from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
 from sqlalchemy_serializer import SerializerMixin
+from . import __all_models
 
 
 class Responses(SqlAlchemyBase, UserMixin, SerializerMixin):
@@ -15,4 +16,4 @@ class Responses(SqlAlchemyBase, UserMixin, SerializerMixin):
     response = sqlalchemy.Column(sqlalchemy.String)
     response_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
 
-    user = orm.relationship('User', backref='responses')
+    user = orm.relationship('User')
