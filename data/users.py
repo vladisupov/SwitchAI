@@ -18,10 +18,10 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
 
-    # jobs = orm.relationship("Jobs", back_populates='user')
+    responses = orm.relationship("Responses", back_populates='user')
 
     def __repr__(self):
-        return f'<Colonist> {self.id} {self.surname} {self.name}'
+        return f'<User> {self.id} {self.surname} {self.name}'
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
