@@ -4,6 +4,7 @@ import requests
 from dotenv import load_dotenv
 import os
 from data.users import User
+from data.ai_responses import Responses
 
 from . import db_session
 
@@ -13,7 +14,8 @@ OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
 OPENROUTER_URL = "https://openrouter.ai/api/v1/responses"
 AI_MODELS = ["nvidia/nemotron-3-super-120b-a12b:free",
              "poolside/laguna-xs.2:free",
-             "z-ai/glm-4.5-air:free"
+             "z-ai/glm-4.5-air:free",
+             "openrouter/owl-alpha",
              ]
 
 blueprint = flask.Blueprint(
@@ -33,10 +35,10 @@ def api_neuro():
     data = request.json
     user_prompt = data.get('prompt', '')
     model = data.get('model', '')
-    user_mail = data.get('user_mail', '')
+    user_email = data.get('user_mail', '')
 
     db_sess = db_session.create_session()
-    user = db_sess.query(User).filter(User.email == user_mail).first()
+    user = db_sess.query(User).filter(User.email == user_email).first()
     if not user:
         return jsonify({'error': 'There is no such user'}), 400 #Проверка на существование пользователя
 
@@ -63,7 +65,20 @@ def api_neuro():
         response.raise_for_status()
         result = response.json()
 
-        ai_message = result['output'][1]['content'][0]['text']
+        ai_message = result['output'][-1]['content'][0]['text']
+
+        user_id = db_sess.query(User).filter(User.email == user_email).first().id
+
+        ai_response = Responses(                        #Добавление запроса и ответа в таблицу
+            user_id=user_id,
+            model=model,
+            prompt=user_prompt,
+            response=ai_message,
+        )
+
+        db_sess.add(ai_response)
+        db_sess.commit()
+
         return jsonify({'message': ai_message})
 
     except Exception as e:

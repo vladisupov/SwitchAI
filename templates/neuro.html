@@ -92,105 +92,9 @@
     .neuro-part h1{
         font-size: 2.5rem;
     }
-    .request-div{                                                   /* div для промпта и параметров */
-        display: flex;
-        flex-direction: row;
-        border: 2px solid #2d3a53;
-        border-radius: 10px;
-        width: auto;
-        height: 500px;
-        margin-top: 20px;
-    }
-    .prompt-div{
-        background-color: #152542;
-        width: 60%;
-        height: 100%;
-        /* display: flex; */
-        flex-direction: column;
-        justify-content: flex-start;
-        padding: 0.5rem 1rem;
-        border-radius: 10px 0 0 10px;
-    }
-    .prompt-div p{
-        font-size: 1.5rem;
-        font-weight: 800;
-    }
-    .prompt-area{                                                   /* textarea для промпта */
-        outline: none;
-        border: 1px solid #c5c5c5;
-        box-shadow: 0 0 7px #c5c5c5;
-        border-radius: 10px;
-        width: 100%;
-        height: 85%;
-        text-align: start;
-        justify-content: flex-start;
-        color: #c5c5c5;
-        background-color: #2d3a53;
-    }
-    .prompt-area:focus{
-        outline: none;
-        border: 3px solid #00E6FF;
-        box-shadow: 0 0 7px #00E6FF;
-    }
-    .params-div{                                                        /* параметры */
-        background-color: #2d3a53;
-        width: 40%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding: 0.5rem 1rem;
-        border-radius: 0 10px 10px 0;
-    }
-    .params-div p{
-        font-size: 1.5rem;
-        font-weight: 800;
-    }
-    .generate-btn{                                                  /* кнопка сгенерировать */
-        width: auto;
-        height: 15%;
-        align-items: center;
-        justify-content: center;
-        background-color: #76ff03;
-        border: 1px solid #76ff03;
-        border-radius: 15px;
-        color: black;
-        box-shadow: 0 0 7px #76ff03;
-        font-weight: 800;
-        transition: 0.3s ease;
-    }
-    @media (hover: hover){
-        .generate-btn:hover{
-            transform: scale(1.05);
-        }
-    }
-    .login-to-generate-btn{                                  /* Кнопка входа, если пользователь не авторизирван*/
-        width: auto;
-        height: 15%;
-        align-items: center;
-        justify-content: center;
-        background-color: #76ff03;
-        border: 1px solid #76ff03;
-        border-radius: 15px;
-        color: black;
-        text-decoration: none;
-        box-shadow: 0 0 7px #76ff03;
-        font-weight: 800;
-        transition: 0.3s ease;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    @media (hover: hover){
-        .login-to-generate-btn:hover{
-            transform: scale(1.05);
-            text-decoration: none;
-            color: black;
-        }
-    }
     .neuro-choice{                                                      /* Выбор нейросети */
         width: auto;
-        height: 300px;
+        height: 200px;
         margin-top: 20px;
         background-color: #152542;
         display: flex;
@@ -237,7 +141,102 @@
         height: calc(100% - 40px);
         color: #c5c5c5;
         margin: 20px 5px;
-    }                                                          
+    }               
+    .request-div{                                                   /* div для промпта и параметров */
+        display: flex;
+        flex-direction: row;
+        border: 2px solid #2d3a53;
+        border-radius: 10px;
+        width: auto;
+        height: 150px;
+        margin-top: 20px;
+    }
+    .prompt-div{
+        background-color: #152542;
+        width: 60%;
+        height: 100%;
+        /* display: flex; */
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 0.5rem 1rem;
+        border-radius: 10px 0 0 10px;
+    }
+    .prompt-div p{
+        font-size: 1rem;
+        font-weight: 800;
+    }
+    .prompt-area{                                                   /* textarea для промпта */
+        outline: none;
+        border: 1px solid #c5c5c5;
+        box-shadow: 0 0 7px #c5c5c5;
+        border-radius: 10px;
+        width: 100%;
+        height: calc(100% - 3rem);
+        justify-content: flex-start;
+        color: #c5c5c5;
+        background-color: #2d3a53;
+    }
+    .prompt-area:focus{
+        outline: none;
+        border: 3px solid #00E6FF;
+        box-shadow: 0 0 7px #00E6FF;
+    }
+    .params-div{                                                        /* параметры */
+        background-color: #2d3a53;
+        width: 40%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 0.5rem 1rem;
+        border-radius: 0 10px 10px 0;
+    }
+    .params-div p{
+        font-size: 1rem;
+        font-weight: 800;
+    }
+    .generate-btn{                                                  /* кнопка сгенерировать */
+        width: auto;
+        height: 50%;
+        align-items: center;
+        justify-content: center;
+        background-color: #76ff03;
+        border: 1px solid #76ff03;
+        border-radius: 15px;
+        color: black;
+        box-shadow: 0 0 7px #76ff03;
+        font-weight: 800;
+        transition: 0.3s ease;
+    }
+    @media (hover: hover){
+        .generate-btn:hover{
+            transform: scale(1.05);
+        }
+    }
+    .login-to-generate-btn{                                  /* Кнопка входа, если пользователь не авторизирван*/
+        width: auto;
+        height: 15%;
+        align-items: center;
+        justify-content: center;
+        background-color: #76ff03;
+        border: 1px solid #76ff03;
+        border-radius: 15px;
+        color: black;
+        text-decoration: none;
+        box-shadow: 0 0 7px #76ff03;
+        font-weight: 800;
+        transition: 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    @media (hover: hover){
+        .login-to-generate-btn:hover{
+            transform: scale(1.05);
+            text-decoration: none;
+            color: black;
+        }
+    }                                           
     @media (max-width: 800px){                                          /* Стили для экрана <= 800px */
         .params-div p{
             font-size: 1rem;
@@ -261,7 +260,7 @@
         }
         .generate-btn{
             width: auto;
-            height: 15%;
+            height: 50%;
             align-items: center;
             justify-content: center;
             background-color: #76ff03;
@@ -393,8 +392,8 @@
             font-weight: 800;
         }
         .generate-btn{
-            width: calc(100% - 1rem);
-            height: 30%;
+            width: 100%;
+            height: 50%;
             align-items: center;
             justify-content: center;
             background-color: #76ff03;
@@ -407,7 +406,7 @@
             font-size: 12px;
         }
         .login-to-generate-btn{                                  /* Кнопка входа, если пользователь не авторизирван*/
-            width: calc(100% - 1rem);
+            width: 100%;
             height: 30%;
             align-items: center;
             justify-content: center;
@@ -468,7 +467,7 @@
             width: calc(100% - 10px);
             height: 40px;
             color: #c5c5c5;
-            margin: 20px 5px;
+            margin: 10px 5px;
         }            
         .neuro-dropdown:focus{
             outline: none;
@@ -483,7 +482,7 @@
             width: calc(100% - 10px);
             height: calc(100% - 80px);
             color: #c5c5c5;
-            margin: 20px 5px;
+            margin: 10px 5px;
         }
     }
 </style>
@@ -511,6 +510,7 @@
                     <option value="1">Nvidia nemotron-3-super-120b-a12b</option>
                     <option value="2">poolside laguna-xs.2:free</option>
                     <option value="3">Z.ai: GLM 4.5 Air</option>
+                    <option value="4">Owl Alpha</option>
                 </select>
                 <textarea disabled class="description-area" id="description-area"></textarea>
             </div>
@@ -546,7 +546,9 @@
         const neuro_descriptions = [
             "NVIDIA Nemotron 3 Super - это открытая гибридная модель MoE с 120 бай-бай параметрами, активирующая всего 12 БАЙ-бай параметров для максимальной эффективности вычислений и точности в сложных многоагентных приложениях. Построенный на гибридной архитектуре Mamba-Transformer, состоящей из экспертов, с предсказанием нескольких токенов (MTP), он обеспечивает более чем на 50% более высокую генерацию токенов по сравнению с ведущими открытыми моделями.",
             "Laguna XS.2 — это модель второго поколения в классе XS от Poolside(открывается в новой вкладке), из серии эффективных агентов для написания кода. Она сочетает в себе возможности вызова инструментов и логического вывода с компактными размерами, предлагая контекстное окно на 128 КБ и до 8 КБ выходных токенов. Квантованная модель fp8 для быстрых и экономичных рабочих процессов агентного кодирования.Laguna XS.2 предназначен для разработки программного обеспечения и агентского кодирования",
-            "GLM-4.5-Air — это облегченная версия нашей новейшей флагманской модели, также специально разработанная для агентно-ориентированных приложений.  Как и GLM-4.5, она основана на архитектуре Mixture-of-Experts (MoE), но имеет более компактный размер параметров.  GLM-4.5-Air также поддерживает гибридные режимы логического вывода: «режим мышления» для сложных рассуждений и использования инструментов и «режим без мышления» для взаимодействия в реальном времени."
+            "GLM-4.5-Air — это облегченная версия нашей новейшей флагманской модели, также специально разработанная для агентно-ориентированных приложений.  Как и GLM-4.5, она основана на архитектуре Mixture-of-Experts (MoE), но имеет более компактный размер параметров.  GLM-4.5-Air также поддерживает гибридные режимы логического вывода: «режим мышления» для сложных рассуждений и использования инструментов и «режим без мышления» для взаимодействия в реальном времени.",
+            "Owl Alpha — это высокопроизводительная базовая модель, предназначенная для агентных рабочих нагрузок. Она изначально поддерживает использование инструментов и выполнение задач с длительным контекстом, обеспечивая высокую производительность при генерации кода, автоматизации рабочих процессов и выполнении сложных инструкций. Совместима с Claude Code, OpenClaw и другими популярными инструментами для повышения производительности",
+
         ];
         textarea.textContent = neuro_descriptions[selected_value - 1];
     }
@@ -559,6 +561,7 @@
         "nvidia/nemotron-3-super-120b-a12b:free",
         "poolside/laguna-xs.2:free",
         "z-ai/glm-4.5-air:free",
+        "openrouter/owl-alpha",
     ];
     //Обработка клика по кнопке "сгенерировать"
     generateBtn.addEventListener("click", async () => {

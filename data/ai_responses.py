@@ -17,3 +17,6 @@ class Responses(SqlAlchemyBase, UserMixin, SerializerMixin):
     response_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
 
     user = orm.relationship('User')
+
+    def __repr__(self):
+        return f'<Response> {self.id} {self.model} {self.prompt} {self.response}'

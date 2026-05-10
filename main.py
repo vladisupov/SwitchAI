@@ -132,11 +132,9 @@ def neuro_request():
         response.raise_for_status()
         result = response.json()
 
-        print(result)
-        print(result['output'])
         try:
-            ai_message = result['output'][1]['content'][0]['text']
-            ai_response = Responses(
+            ai_message = result['output'][-1]['content'][0]['text']
+            ai_response = Responses(                    #Добавление запроса и ответа в таблицу
                 user_id=current_user.id,
                 model=model,
                 prompt=user_prompt,
