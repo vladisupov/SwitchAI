@@ -58,8 +58,8 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
-        return render_template('login.html', message="Wrong login or password", form=form)
-    return render_template('login.html', title='Authorization', form=form)
+        return render_template('login.html', message="Неправильный логин или пароль", form=form)
+    return render_template('login.html', title='Авторизация', form=form)
 
 
 # ------------------------------------------------Выход из аккаунта------------------------------------------
@@ -77,11 +77,11 @@ def reqister():
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Register', form=form,
-                                   message="Passwords don't match")
+                                   message="Пароли не совпадают")
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Register', form=form,
-                                   message="This user already exists")
+                                   message="Пользователь с таким email уже существует")
         user = User(
             name=form.name.data,
             surname=form.surname.data,
