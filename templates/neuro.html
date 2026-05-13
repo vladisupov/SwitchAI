@@ -77,8 +77,10 @@
         background: url(/static/img/background_neuro.png) no-repeat;   /* Задний фон */
         background-size: cover;
         background-position: center;
+        background-attachment: fixed;
         width: 100vw;
-        height: 100vh;
+        height: 150vh;
+        max-height: 150vh;
         display: flex;
     }
     .neuro-part{                                                    /* Главная часть (div для всего конетнта на странице) */
@@ -148,7 +150,7 @@
         border: 2px solid #2d3a53;
         border-radius: 10px;
         width: auto;
-        height: 150px;
+        height: 200px;
         margin-top: 20px;
     }
     .prompt-div{
@@ -238,7 +240,62 @@
             text-decoration: none;
             color: black;
         }
-    }                                           
+    }
+   
+    .file-upload-wrapper {                                               /* Контейнер для выбора файла */
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    .custom-file-label {                                        /* Сама кнопка "Выберите файл" */
+        background-color: #00E6FF;
+        color: black;
+        padding: 8px 16px;
+        border: 1px solid #00E6FF;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 800;
+        font-size: 14px;
+        box-shadow: 0 0 10px #00E6FF;
+        transition: 0.3s ease;
+        white-space: nowrap;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .custom-file-label::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+        display: none;
+        height: calc(1.5em + .75rem);
+        padding: .375rem .75rem;
+        line-height: 1.5;
+        color: #495057;
+        content: "Browse";
+        background-color: #e9ecef;
+        border-left: inherit;
+        border-radius: 0 .25rem .25rem 0;
+    }
+    @media (hover: hover){
+        .custom-file-label:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #00E6FF;
+        }
+    }
+    .file-name-text {                                                    /* Текст "Файл не выбран" */
+        color: white;
+        font-size: 14px;
+        margin-left: 10px;
+        font-weight: 400;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
     @media (max-width: 800px){                                          /* Стили для экрана <= 800px */
         .params-div p{
             font-size: 1rem;
@@ -274,6 +331,9 @@
             transition: 0.3s ease;
             font-size: 12px;
         }
+        .generate-btn:disabled{
+            filter: brightness(90%);
+        }
         .login-to-generate-btn{                                  /* Кнопка входа, если пользователь не авторизирван*/
             width: auto;
             height: 50px;
@@ -292,6 +352,12 @@
             justify-content: center;
             align-items: center;
         }
+        .login-to-generate-btn:focus{
+            transform: scale(1.05);
+            filter: brightness(90%);
+            text-decoration: none;
+            color: black;
+        }             
     }
     .response-div{                                                          /* div для ответа нейросети */
         background-color: #152542;
@@ -327,7 +393,7 @@
         height: 100%;
         resize: none;
         text-align: start;
-        color: #c5c5c5;
+        color: #e5e3e3;
         background-color: #2d3a53;
     }
     @media (max-width: 600px){                                                  /* стили для телефонов(экран <= 600px) */
@@ -348,13 +414,13 @@
             border: 2px solid #2d3a53;
             border-radius: 10px;
             width: auto;
-            height: 500px;
+            height: 700px;
             margin-top: 20px;
         }
         .prompt-div{
             background-color: #152542;
             width: 100%;
-            height: 160%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -393,6 +459,7 @@
         .params-div p{
             font-size: 12px;
             font-weight: 800;
+            margin-bottom: 0.5rem;
         }
         .generate-btn{
             width: 100%;
@@ -407,6 +474,9 @@
             font-weight: 800;
             transition: 0.3s ease;
             font-size: 12px;
+        }
+        .generate-btn:disabled{
+            filter: brightness(90%);
         }
         .login-to-generate-btn{                                  /* Кнопка входа, если пользователь не авторизирван*/
             width: 100%;
@@ -427,11 +497,11 @@
             align-items: center;
         }
         .login-to-generate-btn:focus{
-            filter: brightness(85%);
-        }
-        .generate-btn:focus{
-            filter: brightness(85%);
-        }
+            transform: scale(1.05);
+            filter: brightness(90%);
+            text-decoration: none;
+            color: black;
+        }             
         .response-div p {
             margin: 0.5rem 0.5rem;
             font-size: 12px;
@@ -439,8 +509,8 @@
         }
         .neuro-choice{                                                      /* Выбор нейросети */
             width: auto;
-            height: 400px;
-            margin-top: 20px;
+            height: 650px;
+            margin-top: 10px;
             background-color: #152542;
             display: flex;
             flex-direction: column;
@@ -484,8 +554,12 @@
             border-radius: 10px;
             width: calc(100% - 10px);
             height: calc(100% - 80px);
-            color: #c5c5c5;
+            color: #e5e3e3;
             margin: 10px 5px;
+        }
+        .prompt-div p{
+            margin: 0.5rem 0.5rem;
+            margin-top: 0;
         }
     }
 </style>
@@ -525,6 +599,14 @@
             </div>
             <div class="params-div">
                 <p>Параметры</p>
+                <!-- Форма для загрузки файла -->
+                <div class="file-upload-wrapper">
+                    <label for="fileInput" class="custom-file-label">
+                        Выберите файл
+                    </label>
+                    <span id="file-name-display" class="file-name-text">Файл не выбран</span>
+                    <input type="file" id="fileInput" accept=".txt,.json,.csv" style="display: none;">
+                </div>
                 {% if not current_user.is_authenticated %}
                     <a class="login-to-generate-btn" href="/login">Вход ⚠️</a>
                 {% else %}
@@ -560,18 +642,44 @@
     const promptArea = document.getElementById("prompt-area");
     const requestArea = document.getElementById("genereted-text-area");
     const model_list = document.getElementById("neuro-dropdown")
+    const fileInput = document.getElementById("fileInput");
     const neuro_links = [
         "nvidia/nemotron-3-super-120b-a12b:free",
         "poolside/laguna-xs.2:free",
         "z-ai/glm-4.5-air:free",
         "openrouter/owl-alpha",
     ];
+    // Функция-помощник для чтения файла как текста
+    function readFileAsText(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject("Ошибка при чтении файла");
+            reader.readAsText(file);
+        });
+    }
     //Обработка клика по кнопке "сгенерировать"
     if (generateBtn){
         generateBtn.addEventListener("click", async () => {
-        const prompt = promptArea.value;
+        let prompt = promptArea.value;
+
+        // 1. Проверяем, выбран ли файл
+        if (fileInput.files && fileInput.files.length > 0) {
+            try {
+                requestArea.innerHTML = "Читаю файл...";
+                const fileContent = await readFileAsText(fileInput.files[0]);
+                
+                // Склеиваем основной промпт и содержимое файла
+                // Добавляем пояснение для нейросети, где начинается контент из файла
+                prompt = prompt + "\n\n[Контент из прикрепленного файла]:\n" + fileContent;
+            } catch (err) {
+                alert(err);
+                return;
+            }
+        }
+
         const model = neuro_links[model_list.value - 1];
-        if (!prompt) return alert("Введите текст");
+        if (!prompt.trim()) return alert("Введите текст или выберите файл");
 
         //Деактивируем кнопку во время генерации, чтобы избежать повтороной отвправки
         generateBtn.disabled = true;
@@ -579,7 +687,7 @@
 
         try{
             //Отправляем запрос на страницу neuro_request на python сервере
-            const response = await fetch("http://127.0.0.1:8080/neuro_request", {
+            const response = await fetch("/neuro_request", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json' //Говорим серверу, что отправили json
@@ -608,7 +716,14 @@
         }
         });
     }
-    
-    
+    //Динамическое изменение имени файла при открытии файла
+    document.getElementById('fileInput').addEventListener('change', function() {
+    const fileNameDisplay = document.getElementById('file-name-display');
+        if (this.files && this.files.length > 0) {
+            fileNameDisplay.textContent = this.files[0].name;
+        } else {
+            fileNameDisplay.textContent = "Файл не выбран";
+        }
+    });
 </script>
 {% endblock %}

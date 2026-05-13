@@ -134,7 +134,7 @@ def neuro_request():
 
         try:
             ai_message = result['output'][-1]['content'][0]['text']
-            ai_response = Responses(                    #Добавление запроса и ответа в таблицу
+            ai_response = Responses(  # Добавление запроса и ответа в таблицу
                 user_id=current_user.id,
                 model=model,
                 prompt=user_prompt,
