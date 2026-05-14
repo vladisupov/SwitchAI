@@ -8,6 +8,7 @@
         background-image: url(/static/img/background%20image.png);
         background-size: cover;
         background-repeat: no-repeat;
+        background-attachment: fixed;
         max-width: 100%;
         min-width: 100%;
         min-height: 100vh;
@@ -53,12 +54,13 @@
         align-items: center;
         justify-content: center;
         font-weight: 800;
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
     }
     #begin-btn:focus{
         filter: brightness(90%);
         text-decoration: none;
         color: black;
-        transform: scale(1.05);
+        transform: scale(0.95);
     }
     @media (hover: hover){
         #begin-btn:hover{
@@ -87,16 +89,23 @@
             justify-content: center;
             font-weight: 800;
             font-size: 0.8rem;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
         }
         #begin-btn:focus{
             filter: brightness(90%);
-            transform: scale(1.05);
+            transform: scale(0.95);
+            text-decoration: none;
+            color: black;
+        }
+        #begin-btn:active{
+            filter: brightness(90%);
+            transform: scale(0.95);
             text-decoration: none;
             color: black;
         }
         .begin-container p{
         font-size: 1em;
-    }
+        }
         .begin-container h1{
             font-size: 1.5em;
         }

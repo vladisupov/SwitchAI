@@ -181,6 +181,12 @@
         flex-direction: column;
         gap: 1rem;
         width: 80%;
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+    .mobile-btns:active {
+        filter: brightness(90%);
+        transform: scale(0.95);
     }
     /* Responsive */
     @media (max-width: 800px) {                             /* мобильная версия */
@@ -203,7 +209,11 @@
             display: block;
         }
         .btn-nav:focus{
-            transform: scale(1.05);
+            transform: scale(0.95);
+            filter: brightness(90%);
+        }
+        .btn-nav:active{
+            transform: scale(0.95);
             filter: brightness(90%);
         }
     }

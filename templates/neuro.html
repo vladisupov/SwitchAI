@@ -78,10 +78,26 @@
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
-        width: 100vw;
-        height: 150vh;
-        max-height: 150vh;
+        width: 100%;
+        height: 100%;
         display: flex;
+    }
+    @supports not (background-attachment: fixed){
+        .background-img{
+            background-attachment: scroll;
+        }
+        .background-img::before{
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background: url(/static/img/background_neuro.png) no-repeat;   /* Задний фон */
+            background-size: cover;
+            background-position: center;
+        }
     }
     .neuro-part{                                                    /* Главная часть (div для всего конетнта на странице) */
         color: white;
@@ -92,7 +108,10 @@
         width: 100%;
     }
     .neuro-part h1{
+        width: 100%;
+        text-align: center;
         font-size: 2.5rem;
+        font-weight: 800;
     }
     .neuro-choice{                                                      /* Выбор нейросети */
         width: auto;
@@ -141,8 +160,14 @@
         border-radius: 10px;
         width: 60%;
         height: calc(100% - 40px);
-        color: #c5c5c5;
+        color: #e5e3e3;
         margin: 20px 5px;
+    }
+    .description-area:disabled {
+        opacity: 1;
+        -webkit-text-fill-color: #e2e2e2;
+        color: #e2e2e2;
+        font-weight: bold;
     }               
     .request-div{                                                   /* div для промпта и параметров */
         display: flex;
@@ -210,6 +235,7 @@
         box-shadow: 0 0 7px #76ff03;
         font-weight: 800;
         transition: 0.3s ease;
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
     }
     @media (hover: hover){
         .generate-btn:hover{
@@ -233,6 +259,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
     }
     @media (hover: hover){
         .login-to-generate-btn:hover{
@@ -247,6 +274,7 @@
         align-items: center;
         margin-bottom: 15px;
         width: 100%;
+        flex-wrap: wrap;
     }
     .custom-file-label {                                        /* Сама кнопка "Выберите файл" */
         background-color: #00E6FF;
@@ -291,12 +319,38 @@
         color: white;
         font-size: 14px;
         margin-left: 10px;
-        font-weight: 400;
+        font-weight: 800;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        white-space: wrap;
+    }
+    .generated-text-area {                                                  /* textarea для сгенерированного тектса */                                   
+        outline: none;
+        border: 1px solid #c5c5c5;
+        box-shadow: 0 0 7px #c5c5c5;
+        border-radius: 10px;
+        width: 100%;
+        height: 100%;
+        resize: none;
+        text-align: start;
+        color: #e5e3e3;
+        background-color: #2d3a53;
+    }
+    .generated-text-area:disabled{
+        opacity: 1;
+        -webkit-text-fill-color: #e2e2e2;
+        color: #e2e2e2;
+        font-weight: bold;
     }
     @media (max-width: 800px){                                          /* Стили для экрана <= 800px */
+        .neuro-part{                                                    /* Главная часть (div для всего конетнта на странице) */
+            color: white;
+            font-weight: 800;
+            display: flex;
+            flex-direction: column;
+            margin: 20px 3rem;
+            width: 100%;
+        }
         .params-div p{
             font-size: 1rem;
             font-weight: 800;
@@ -317,6 +371,15 @@
             display: flex;
             align-items: center;
         }
+        .file-name-text {                                                    /* Текст "Файл не выбран" */
+            color: white;
+            font-size: 14px;
+            margin-left: 10px;
+            font-weight: 800;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
         .generate-btn{
             width: auto;
             height: 50px;
@@ -329,10 +392,10 @@
             box-shadow: 0 0 7px #76ff03;
             font-weight: 800;
             transition: 0.3s ease;
-            font-size: 12px;
+            font-size: 1rem;
         }
         .generate-btn:disabled{
-            filter: brightness(90%);
+            filter: brightness(85%);
         }
         .login-to-generate-btn{                                  /* Кнопка входа, если пользователь не авторизирван*/
             width: auto;
@@ -347,13 +410,19 @@
             box-shadow: 0 0 7px #76ff03;
             font-weight: 800;
             transition: 0.3s ease;
-            font-size: 12px;
+            font-size: 1rem;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .login-to-generate-btn:focus{
-            transform: scale(1.05);
+            transform: scale(0.95);
+            filter: brightness(90%);
+            text-decoration: none;
+            color: black;
+        }
+        .login-to-generate-btn:active{
+            transform: scale(0.95);
             filter: brightness(90%);
             text-decoration: none;
             color: black;
@@ -384,29 +453,53 @@
         height: 90%;
         padding: 0.5rem 1rem;
     }
-    .generated-text-area {                                                  /* textarea для сгенерированного тектса */                                   
-        outline: none;
-        border: 1px solid #c5c5c5;
-        box-shadow: 0 0 7px #c5c5c5;
-        border-radius: 10px;
-        width: 100%;
-        height: 100%;
-        resize: none;
-        text-align: start;
-        color: #e5e3e3;
-        background-color: #2d3a53;
-    }
     @media (max-width: 600px){                                                  /* стили для телефонов(экран <= 600px) */
-        .neuro-part{
+        .background-img{
+            background: url(/static/img/background_neuro_mobile.png) no-repeat;   /* Задний фон */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+        @supports not (background-attachment: fixed){
+            .background-img{
+                background-attachment: scroll;
+        }
+        .background-img::before{
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -2;
+            background: url(/static/img/background_neuro.png) no-repeat;   /* Задний фон */
+            background-size: cover;
+            background-position: center;
+        }
+        .background-img::after{
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    }
+        .neuro-part{                                                    /* Главная часть (div для всего конетнта на странице) */
             color: white;
             font-weight: 800;
             display: flex;
             flex-direction: column;
-            margin: 10px auto;
-            width: 80vw;
+            margin: 20px 3rem;
+            width: 100%;
         }
         .neuro-part h1{
             font-size: 20px;
+            font-weight: 800;
         }
         .request-div{
             display: flex;
@@ -414,7 +507,7 @@
             border: 2px solid #2d3a53;
             border-radius: 10px;
             width: auto;
-            height: 700px;
+            height: 500px;
             margin-top: 20px;
         }
         .prompt-div{
@@ -449,7 +542,7 @@
         .params-div{
             background-color: #2d3a53;
             width: 100%;
-            height: 100%;
+            height: auto;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -474,9 +567,10 @@
             font-weight: 800;
             transition: 0.3s ease;
             font-size: 1rem;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
         }
         .generate-btn:disabled{
-            filter: brightness(90%);
+            filter: brightness(85%);
         }
         .login-to-generate-btn{                                  /* Кнопка входа, если пользователь не авторизирван*/
             width: 100%;
@@ -491,17 +585,24 @@
             box-shadow: 0 0 7px #76ff03;
             font-weight: 800;
             transition: 0.3s ease;
-            font-size: 12px;
+            font-size: 1rem;
             display: flex;
             justify-content: center;
             align-items: center;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
         }
         .login-to-generate-btn:focus{
-            transform: scale(1.05);
+            transform: scale(0.95);
             filter: brightness(90%);
             text-decoration: none;
             color: black;
-        }             
+        }
+        .login-to-generate-btn:active{
+            transform: scale(0.95);
+            filter: brightness(90%);
+            text-decoration: none;
+            color: black;
+        }                       
         .response-div p {
             margin: 0.5rem 0.5rem;
             font-size: 12px;
@@ -509,7 +610,7 @@
         }
         .neuro-choice{                                                      /* Выбор нейросети */
             width: auto;
-            height: 650px;
+            height: 400px;
             margin-top: 10px;
             background-color: #152542;
             display: flex;
@@ -560,6 +661,18 @@
         .prompt-div p{
             margin: 0.5rem 0.5rem;
             margin-top: 0;
+        }
+        .generated-text-area {                                                  /* textarea для сгенерированного тектса */                                   
+            outline: none;
+            border: 1px solid #c5c5c5;
+            box-shadow: 0 0 7px #c5c5c5;
+            border-radius: 10px;
+            width: 100%;
+            height: 100%;
+            resize: none;
+            text-align: start;
+            color: #e5e3e3;
+            background-color: #2d3a53;
         }
     }
 </style>

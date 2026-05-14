@@ -13,6 +13,7 @@
         height: 70px;
         width: 100%;
         max-width: 300px;
+                -webkit-tap-highlight-color: rgba(0,0,0,0.1);
     }
     @media (hover: hover){
         .submit-reg-btn:hover {
@@ -22,7 +23,11 @@
     }
     .submit-reg-btn:focus{
         filter: brightness(90%);
-        transform: scale(1.1);
+        transform: scale(0.95);
+    }
+    .submit-reg-btn:active{
+        filter: brightness(90%);
+        transform: scale(0.95);
     }
     .form-control {
         width: 100%;

@@ -13,6 +13,7 @@
         width: 300px;
         cursor: pointer;
         font-weight: 800;
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
     }
     @media (hover : hover){
         .submit-log-btn:hover {
@@ -22,7 +23,11 @@
         }
     }
     .submit-log-btn:focus{
-        transform: scale(1.1);
+        transform: scale(0.95);
+        filter: brightness(90%);
+    }
+    .submit-log-btn:active{
+        transform: scale(0.95);
         filter: brightness(90%);
     }
     .form-control {
