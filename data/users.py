@@ -28,13 +28,10 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     def generate_verification_token(self):
         self.verification_token = secrets.token_urlsafe(32)
-        print(self.verification_token, 1)
         self.token_expires_at = datetime.datetime.now() + datetime.timedelta(days=1)
-        print(self.token_expires_at, 1)
         return self.verification_token
 
     def verify_email(self, token):
-        print(token, self.verification_token)
         if self.verification_token == token and self.token_expires_at > datetime.datetime.now():
             self.is_verified = True
             self.verification_token = None

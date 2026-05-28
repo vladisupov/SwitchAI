@@ -163,7 +163,6 @@ def verify_email():
                                message=message, email=email)
 
     user = db_sess.query(User).filter(User.verification_token == token).first()
-    print(token)
 
     if not user:
         message = "Неверный или истекший токен"
