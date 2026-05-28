@@ -208,6 +208,12 @@
                         messageP.style.color = 'red';
                     }
                     verify_link.innerText = 'Отправлено';
+                    //Ссылка станет доступной через 30 секунд
+                    setTimeout(() => {
+                        verify_link.disabled = false;
+                        verify_link.style.color = '#0000EE';
+                        verify_link.innerText = "Отправить письмо еще раз";
+                    }, 30000);
                 })
                 .catch(error => {
                     console.error('Error:', error);
