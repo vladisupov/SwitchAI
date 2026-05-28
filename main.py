@@ -10,12 +10,17 @@ from data import neuro_api
 from dotenv import load_dotenv
 from flask import make_response
 from data.ai_responses import Responses
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 load_dotenv()
 
 # Берем ключ для приложения и api key из .env(так безопаснее)
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
 OPENROUTER_URL = "https://openrouter.ai/api/v1/responses"
+MY_GMAIL = os.getenv('MY_GMAIL')
+PASSWORD = os.getenv('GMAIL_PASSWORD')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -28,6 +33,43 @@ def main():
     db_session.global_init("db/switch.db")
     app.register_blueprint(neuro_api.blueprint)
     app.run(port=8080)
+
+def send_verification_email(user_email, token):
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587
+    smtp_user = MY_GMAIL
+    smtp_password = PASSWORD
+
+    verification_link = f"http://127.0.0.1:8080/verify?token={token}&email={user_email}"
+
+    message = MIMEMultipart()
+    message["From"] = smtp_user
+    message["To"] = user_email
+    message["Subject"] = "Подтверждение email"
+
+    html = f"""
+        <html>
+        <body>
+            <h2>Подтверждение email</h2>
+            <p>Перейдите по ссылке для верификации:</p>
+            <a href="{verification_link}">{verification_link}</a>
+            <p>Ссылка действительна 24 часа</p>
+        </body>
+        </html>
+        """
+
+    message.attach(MIMEText(html, "html"))
+
+    try:
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+        server.send_message(message)
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Ошибка: {e}")
+        return False
 
 
 # ------------------------------------------------Главная страница сайта-------------------------------------------
@@ -53,11 +95,14 @@ def load_user(user_id):
 def login():
     form = LoginForm()
     if form.validate_on_submit():
+        email = form.email.data
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            if user.is_verified:
+                login_user(user, remember=form.remember_me.data)
+                return redirect("/")
+            return render_template('login.html', message="Email не подтвержден.", form=form, email=email)
         return render_template('login.html', message="Неправильный логин или пароль", form=form)
     return render_template('login.html', title='Авторизация', form=form)
 
@@ -72,7 +117,7 @@ def logout():
 
 # -----------------------------------------Обработка страницы регистрации. Регистрация---------------------------------------
 @app.route('/register', methods=['GET', 'POST'])
-def reqister():
+def register():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -89,9 +134,70 @@ def reqister():
         )
         user.set_password(form.password.data)
         db_sess.add(user)
+        token = user.generate_verification_token()
         db_sess.commit()
-        return redirect('/login')
+        send_verification_email(form.email.data, token)
+
+        return render_template('register.html', title='Register', form=form,
+                               message="Регистрация прошла успешно. Проверьте почту для подтверждения.")
     return render_template('register.html', title='Регистрация', form=form)
+
+#---------------------------------------------Страница для подтверждения почты-----------------------------
+
+@app.route('/verify', methods=['GET'])
+def verify_email():
+    token = request.args.get('token')
+    email = request.args.get('email')
+    db_sess = db_session.create_session()
+
+    # Передаем email в шаблон, чтобы JS мог использовать его для повторной отправки
+    if db_sess.query(User).filter(User.email == email).first():
+        if db_sess.query(User).filter(User.email == email).first().is_verified:
+            message = "Ваш email уже подтвержден"
+            return render_template('verify.html', title='Верификация',
+                                   message=message, email=email)
+
+    if not token:
+        message = "Токен не предоставлен"
+        return render_template('verify.html', title='Верификация',
+                               message=message, email=email)
+
+    user = db_sess.query(User).filter(User.verification_token == token).first()
+    print(token)
+
+    if not user:
+        message = "Неверный или истекший токен"
+        return render_template('verify.html', title='Верификация',
+                           message=message, email=email)
+
+    if user.verify_email(token):
+        db_sess.commit()
+        message = "Ваш email успешно подтвержден!"
+    else:
+        message = "Срок действия токена истек"
+
+    return render_template('verify.html', title='Верификация',
+                    message=message, email=email)
+
+#----------------------------------------Повторная отправка верификационного письма---------------------------
+@app.route('/resend-verification', methods=['POST'])
+def resend_verification():
+    db_sess = db_session.create_session()
+
+    email = request.form.get('email')
+    user = db_sess.query(User).filter(User.email == email).first()
+    if not user:
+        return jsonify({"error": "Пользователь не найден"}), 404
+
+    if user.is_verified:
+        return jsonify({"error": "Email уже подтвержден"}), 400
+
+    token = user.generate_verification_token()
+    db_sess.commit()
+    send_verification_email(email, token)
+
+    return jsonify({"message": "Письмо отправлено повторно"}), 200
+
 
 
 # --------------------------------------------Страница с нейросетями---------------------------------------

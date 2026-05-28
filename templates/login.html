@@ -88,6 +88,11 @@
         gap: 10px;
         margin: 15px 0;
     }
+    .message-div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 </style>
 <div class="main-reg">
     <img src="/static/img/logo%20SwitchAI.png" width="350" height="132" alt="Logo">
@@ -127,8 +132,11 @@
             {{ form.submit(type="submit", class="submit-log-btn") }}
         </div>
         {% if message %}
-            <div class="text-center mt-4 text-red-500">
-                {{ message }}
+            <div class="message-div">
+                <p id="message-p">{{message }}</p>
+                {% if message == "Email не подтвержден." %}
+                    <a href="#" id="verify_link">Получить письмо для подтверждения</a>
+                {% endif %}
             </div>
         {% endif %}
         <div class="dont-have-account">
@@ -160,6 +168,57 @@
     
     // Перерисовываем иконки, чтобы Lucide заменил атрибут на новый SVG
     lucide.createIcons();
-}
+    }
+
+    //Повторная отправка верификационного письма
+    document.addEventListener("DOMContentLoaded", function(){
+        const verify_link = document.getElementById("verify_link");
+        const messageP = document.getElementById("message-p");
+
+        if (verify_link){
+            verify_link.addEventListener("click", function(){
+                verify_link.disabled = true;
+                verify_link.style.color = "#8f8f8f";
+                verify_link.style.textDecoration = "none";
+
+                const email = "{{email or ''}}";
+                if (!email){
+                    verify_link.disabled = false;
+                    verify_link.style.color = "#0000EE";
+                    messageP.innerText = 'Ошибка: не предоставлен email. Введите email в поле и попробуйте еще раз';
+                    meaageP.style.color = 'red';
+                    return;
+                }
+
+                const formData = new FormData;
+                formData.append("email", email);
+
+                fetch('/resend-verification', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message){
+                        messageP.innerHTML = data.message;
+                        messageP.style.color = 'green';
+                    }
+                    else if (data.error){
+                        messageP.innerHTML = 'Ошибка:' +  data.error;
+                        messageP.style.color = 'red';
+                    }
+                    verify_link.innerText = 'Отправлено';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    messageP.innerText = 'Произошла ошибка при отправке.';
+                    messageP.style.color = 'red';
+                    verify_link.disabled = false;
+                    verify_link.style.color = "#0000EE"
+                    verify_link.innerText = 'Отправить письмо еще раз';
+                });
+            });
+        }
+    });
 </script>
 {% endblock %}
