@@ -73,16 +73,41 @@
             transform: rotate(180deg);
         }
     } */
-    .background-img{
-        background: url(/static/img/background_neuro.png) no-repeat;   /* Задний фон */
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
+    html {
+        /* Этот цвет заменит белую полосу, если она попытается появиться */
+        background-color: #231c4f !important;
+        height: 100%;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        background: transparent !important;
+        overflow-x: hidden;
+    }
+    body::before {
+        content: "";
+        position: fixed; /* Зафиксирован на экране */
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        display: flex;
+        z-index: -10;
+        background: url(/static/img/background_neuro.png) no-repeat center center;
+        background-size: cover;
+        /* Улучшение производительности Safari */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
-    @supports not (background-attachment: fixed){
+
+    .background-img {
+        background: transparent !important;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    /* @supports not (background-attachment: fixed){
         .background-img{
             background-attachment: scroll;
             transform: translateZ(0);
@@ -96,7 +121,7 @@
             right: 0;
             bottom: 0;
             z-index: -2;
-            background: url(/static/img/background_neuro.png) no-repeat;   /* Задний фон */
+            background: url(/static/img/background_neuro.png) no-repeat;
             background-size: cover;
             background-position: center;
         }
@@ -108,18 +133,18 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            position: relative;
         }
-    }
-    .neuro-part{                                                    /* Главная часть (div для всего конетнта на странице) */
+    } */
+    .neuro-part {
         color: white;
         font-weight: 800;
         display: flex;
         flex-direction: column;
         margin: 20px 3rem;
-        width: 100%;
-        z-index: 1;
+        width: calc(100% - 6rem);
         position: relative;
+        /* Добавим отступ снизу, чтобы контент не прилипал к краю */
+        padding-bottom: 50px; 
     }
     .neuro-part h1{
         width: 100%;
@@ -357,13 +382,37 @@
         font-weight: bold;
     }
     @media (max-width: 800px){                                          /* Стили для экрана <= 800px */
-        .neuro-part{                                                    /* Главная часть (div для всего конетнта на странице) */
-            color: white;
-            font-weight: 800;
+        /* .background-img {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: none !important;
             display: flex;
             flex-direction: column;
-            margin: 20px 3rem;
-            width: 100%;
+        } */
+        body::before {
+            /* Меняем картинку на мобильную */
+            background-image: url(/static/img/background_neuro_mobile.png);
+        }
+        .response-div{
+            height: 300px;
+            padding: 0.5rem 0.5rem;
+        }
+        .background-img::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .neuro-part {
+            margin: 20px 1rem !important;
+            width: calc(100% - 2rem) !important;
+            box-sizing: border-box;
+            padding-bottom: 40px; /* Отступ в самом низу, чтобы не было полос */
         }
         .params-div p{
             font-size: 1rem;
@@ -469,15 +518,21 @@
     }
     @media (max-width: 600px){                                                  /* стили для телефонов(экран <= 600px) */
         .background-img {
-            position: relative;
-            width: 100%;
-            height: 100%;
+            background: none !important; /* Отключаем фон у основного контейнера */
             min-height: 100vh;
-            display: flex;
-            background: none;
+            /* Для Safari ios */
+            min-height: 100dvh; 
         }
-
-        /* Фиксированный фон через псевдоэлемент */
+        neuro-part h1 {
+            font-size: 1.2rem;
+        }
+        .generated-text{
+            padding: 0.5rem 0.5rem;
+        }
+        .generate-btn, .login-to-generate-btn {
+            width: 100% !important;
+        }
+        /* Создаем фиксированную подложку, которая не двигается при скролле */
         .background-img::before {
             content: '';
             position: fixed;
@@ -487,23 +542,24 @@
             bottom: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
-            background: url(/static/img/background_neuro_mobile.png) no-repeat center;
+            z-index: -1;
+            background: url(/static/img/background_neuro_mobile.png) no-repeat center center;
             background-size: cover;
-            pointer-events: none;
+            /* Важно для Safari: предотвращает перерисовку */
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
-        .background-img::after {
+            
+        /* .background-img::after {
             content: '';
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            width: 100%;
-            height: 100%;
             z-index: -1;
             pointer-events: none;
-        }
+        } */
 
         .neuro-part {
             position: relative;
@@ -512,8 +568,8 @@
             font-weight: 800;
             display: flex;
             flex-direction: column;
-            margin: 20px 3rem;
-            width: 100%;
+            margin: 20px 1rem;
+            width: calc(100% - 2rem);
         }
         .neuro-part h1{
             font-size: 20px;
@@ -539,7 +595,7 @@
             border-radius: 10px 10px 0 0;
         }
         .prompt-div p{
-            font-size: 12px;
+            font-size: 1rem;
             font-weight: 800;
         }
         .prompt-area{
@@ -568,7 +624,7 @@
             border-radius: 0 0 10px 10px;
         }
         .params-div p{
-            font-size: 12px;
+            font-size: 1rem;
             font-weight: 800;
             margin-bottom: 0.5rem;
         }
@@ -623,7 +679,7 @@
         }                       
         .response-div p {
             margin: 0.5rem 0.5rem;
-            font-size: 12px;
+            font-size: 1rem;
             font-weight: 800;
         }
         .neuro-choice{                                                      /* Выбор нейросети */
@@ -640,7 +696,7 @@
         }
         .neuro-choice p{
             font-weight: 800;
-            font-size: 12px;
+            font-size: 1rem;
             margin-bottom: 10px;
             padding: 0;
         }
@@ -692,6 +748,11 @@
             color: #e5e3e3;
             background-color: #2d3a53;
         }
+        .file-name-text {
+            font-size: 12px;
+            word-break: break-all; /* Перенос длинных имен файлов */
+            white-space: normal;
+        }
     }
 </style>
 <div class="background-img">
@@ -739,7 +800,7 @@
                     <input type="file" id="fileInput" accept=".txt,.json,.csv" style="display: none;">
                 </div>
                 {% if not current_user.is_authenticated %}
-                    <a class="login-to-generate-btn" href="/login">Вход ⚠️</a>
+                    <a class="login-to-generate-btn" href="/login" style="text-decoration: none;">Вход ⚠️</a>
                 {% else %}
                     <button class="generate-btn" id="generate-btn">Сгенерировать</button>
                 {% endif %}
@@ -748,12 +809,33 @@
         <div class="response-div">
             <p>Сгенерированный текст</p>
             <div class="generated-text">
-                <textarea disabled class="generated-text-area" id="genereted-text-area" placeholder="Напиши запрос и здесь появится ответ нейросети"></textarea>
+                <textarea disabled class="generated-text-area" id="generated-text-area" placeholder="Напиши запрос и здесь появится ответ нейросети"></textarea>
             </div>
         </div>
     </div>
 </div>
 <script>
+    //Установка высоты картнки на заднем фоне, чтобы убрать пробелы на телефонах
+    // function setBackgroundSize() {
+    //     const bg = document.querySelector('.background-img');
+        
+    //     if (bg) {
+
+    //         const correctHeight = Math.max(
+    //             document.body.scrollHeight,
+    //             window.innerHeight
+    //         );
+            
+    //         bg.style.height = `${correctHeight}px`;
+    //         bg.style.width = '100%';
+            
+    //         console.log('Background height set to:', correctHeight);
+    //     }
+    // }
+
+    // window.addEventListener('load', setBackgroundSize);
+    // window.addEventListener('resize', setBackgroundSize);
+    // window.addEventListener('orientationchange', setBackgroundSize);
     //Обновление описания модели в зависимости от выбранной модели
     UpdateTextarea();
     function UpdateTextarea(){
@@ -771,7 +853,7 @@
     //Отправление промпта и получение ответа от ии
     const generateBtn = document.getElementById("generate-btn");
     const promptArea = document.getElementById("prompt-area");
-    const requestArea = document.getElementById("genereted-text-area");
+    const requestArea = document.getElementById("generated-text-area");
     const model_list = document.getElementById("neuro-dropdown")
     const fileInput = document.getElementById("fileInput");
     const neuro_links = [
