@@ -787,7 +787,7 @@
         <div class="request-div">
             <div class="prompt-div">
                 <p>Ваш промт</p>
-                <textarea class="prompt-area" id="prompt-area" placeholder="Опишите вашу задачу или задайте вопрос"></textarea>
+                <textarea class="prompt-area" id="prompt-area" placeholder="Опишите вашу задачу или задайте вопрос" onchange="setBtnDisable()"></textarea>
             </div>
             <div class="params-div">
                 <p>Параметры</p>
@@ -849,6 +849,19 @@
 
         ];
         textarea.textContent = neuro_descriptions[selected_value - 1];
+    }
+    setBtnDisable();
+    function setBtnDisable(){
+        const generateBtn = document.getElementById("generate-btn");
+        const promptArea = document.getElementById("prompt-area");
+        if (generateBtn){
+            if (!promptArea.value){
+                generateBtn.disabled = true;
+            }
+            else{
+                generateBtn.disabled = false;
+            }
+        }
     }
     //Отправление промпта и получение ответа от ии
     const generateBtn = document.getElementById("generate-btn");
