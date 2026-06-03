@@ -33,7 +33,7 @@ def main():
     db_session.global_init("db/switch.db")
     app.register_blueprint(neuro_api.blueprint)
     app.run(port=8080)
-
+#Функция для отправки верификационного письма
 def send_verification_email(user_email, token):
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
@@ -57,6 +57,44 @@ def send_verification_email(user_email, token):
         </body>
         </html>
         """
+
+    message.attach(MIMEText(html, "html"))
+
+    try:
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+        server.send_message(message)
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Ошибка: {e}")
+        return False
+
+#Функция для отправки инструкции по смене пароля
+def send_password_reset_email(user_email, token):
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587
+    smtp_user = MY_GMAIL
+    smtp_password = PASSWORD
+
+    link = f"http://127.0.0.1:8080/forgot_password/{token}/{user_email}"
+
+    message = MIMEMultipart()
+    message["From"] = smtp_user
+    message["To"] = user_email
+    message["Subject"] = "Сброс пароля"
+
+    html = f"""
+    <html>
+    <body>
+        <h2>Сброс пароля от аккаунта на сайте SwitchAI</h2>
+        <p>Вы сделали запрос на сброс пароля</p>
+        <a href="{link}">Нажмите здесь для продолжения</a>
+        <p>Ссылка действительна 24 часа</p>
+    </body>
+    </html>
+    """
 
     message.attach(MIMEText(html, "html"))
 
@@ -179,7 +217,7 @@ def verify_email():
                     message=message, email=email)
 
 #----------------------------------------Повторная отправка верификационного письма---------------------------
-@app.route('/resend-verification', methods=['POST'])
+@app.route('/resend_verification', methods=['POST'])
 def resend_verification():
     db_sess = db_session.create_session()
 
@@ -197,6 +235,71 @@ def resend_verification():
 
     return jsonify({"message": "Письмо отправлено повторно"}), 200
 
+
+#-----------------------------------------Отправка письма по сбросу пароля----------------------------------------
+@app.route('/send_password_email', methods=['POST'])
+def send_password_mail():
+    db_sess = db_session.create_session()
+
+    email = request.form.get('email')
+    user = db_sess.query(User).filter(User.email == email).first()
+    if not user:
+        return jsonify({"error": "Пользователь не найден"}), 404
+
+    token = user.generate_password_token()
+    db_sess.commit()
+    send_password_reset_email(email, token)
+
+    return jsonify({"message": "Письмо отправлено"}), 200
+
+#----------------------------------------------Страница забыли пароль-----------------------------------------
+@app.route('/forgot_password')
+def forgot_password():
+    return render_template('forgot_password.html', title="Забыли пароль")
+
+
+#--------------------------------------------Страница сброса пароля----------------------------------
+@app.route('/forgot_password/<token>/<email>')
+def reset_password(token, email):
+    if not token:
+        message = "Токен не предоставлен"
+        return render_template("reset_password.html", message=message, title="Сброс пароля", email=email)
+
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.password_token == token).first()
+
+    if not user:
+        message = "Истекший или неверный токен"
+        return render_template("reset_password.html", message=message, title="Сброс пароля", email=email)
+
+    if user.check_for_reset_password(token):
+        db_sess.commit()
+        message = "OK"
+    else:
+        message = "Срок действия токена истек"
+
+    return render_template("reset_password.html", message=message, title="Сброс пароля", email=email)
+
+#--------------------------------------------Смена пароля------------------------------------------------------
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if not email:
+        return jsonify({"error": "Email не предоставлен"})
+    if not password:
+        return jsonify({"error": "Пароль не предоставлен"})
+
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.email == email).first()
+
+    if not user:
+        return jsonify({"error": "Пользователь не найден"})
+
+    user.set_password(password)
+    db_sess.commit()
+    return jsonify({"message": "Пароль установлен"})
 
 
 # --------------------------------------------Страница с нейросетями---------------------------------------
@@ -257,7 +360,7 @@ def neuro_request():
         return jsonify({'error': str(e)}), 500
 
 
-# --------------------------------------Обработка ошибок при подключении к сайту по API
+# --------------------------------------Обработка ошибок на сайте-----------------------------
 
 @app.errorhandler(404)
 def not_found(error):

@@ -276,10 +276,27 @@
         transition: 0.3s ease;
         -webkit-tap-highlight-color: rgba(0,0,0,0.1);
     }
+    .generate-btn:disabled{
+        filter: brightness(85%);
+        pointer-events: none;
+    }
     @media (hover: hover){
         .generate-btn:hover{
             transform: scale(1.05);
         }
+    }
+    .generate-btn:focus{
+        outline: none;
+        color: black;
+        text-decoration: none;
+    }
+    .generate-btn:active{
+        transform: scale(0.95);
+        filter: brightness(90%);
+        text-decoration: none;
+        color: black;
+        text-decoration: none;
+        transition: transform 0.1s ease-in-out;
     }
     .login-to-generate-btn{                                  /* Кнопка входа, если пользователь не авторизирван*/
         width: auto;
@@ -307,7 +324,19 @@
             color: black;
         }
     }
-   
+    .login-to-generate-btn:focus{
+        outline: none;
+        color: black;
+        text-decoration: none;
+    }
+    .login-to-generate-btn:active{
+        transform: scale(0.95);
+        filter: brightness(90%);
+        text-decoration: none;
+        color: black;
+        text-decoration: none;
+        transition: transform 0.1s ease-in-out;
+    }             
     .file-upload-wrapper {                                               /* Контейнер для выбора файла */
         display: flex;
         align-items: center;
@@ -478,18 +507,6 @@
             justify-content: center;
             align-items: center;
         }
-        .login-to-generate-btn:focus{
-            transform: scale(0.95);
-            filter: brightness(90%);
-            text-decoration: none;
-            color: black;
-        }
-        .login-to-generate-btn:active{
-            transform: scale(0.95);
-            filter: brightness(90%);
-            text-decoration: none;
-            color: black;
-        }             
     }
     .response-div{                                                          /* div для ответа нейросети */
         background-color: #152542;
@@ -664,19 +681,7 @@
             justify-content: center;
             align-items: center;
             -webkit-tap-highlight-color: rgba(0,0,0,0.1);
-        }
-        .login-to-generate-btn:focus{
-            transform: scale(0.95);
-            filter: brightness(90%);
-            text-decoration: none;
-            color: black;
-        }
-        .login-to-generate-btn:active{
-            transform: scale(0.95);
-            filter: brightness(90%);
-            text-decoration: none;
-            color: black;
-        }                       
+        }                
         .response-div p {
             margin: 0.5rem 0.5rem;
             font-size: 1rem;
@@ -850,6 +855,7 @@
         ];
         textarea.textContent = neuro_descriptions[selected_value - 1];
     }
+    //кнопка сгенерировать недоступна при пустом промпте
     setBtnDisable();
     function setBtnDisable(){
         const generateBtn = document.getElementById("generate-btn");

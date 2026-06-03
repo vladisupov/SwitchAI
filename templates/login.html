@@ -41,7 +41,9 @@
         transition: border-color 0.2s;
     }
     .form-control:focus {
-        border-color: #ffffff34;
+        border-color: #0EF57A;
+        box-shadow: 0 0 0.5rem #0EF57A;
+        
     }
     .password-wrapper {
         position: relative;
@@ -107,6 +109,13 @@
         align-items: center;
         justify-content: center;
     }
+    .forgot-password{
+        width: 100%;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 </style>
 <div class="main-reg">
     <img src="/static/img/logo%20SwitchAI.png" width="350" height="132" alt="Logo">
@@ -156,6 +165,9 @@
         <div class="dont-have-account">
             <p>Нет аккаунта?</p>
             <a href="/register">Зарегистрироваться</a>
+        </div>
+        <div class="forgot-password">
+            <a href="/forgot_password">Забыли пароль?</a>
         </div>
     </div>
 </form>

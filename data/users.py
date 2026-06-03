@@ -23,6 +23,8 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     is_verified = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
     verification_token = sqlalchemy.Column(sqlalchemy.String, unique=True)
     token_expires_at = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
+    password_token = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    password_token_expires_at = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
 
     responses = orm.relationship("Responses", back_populates='user')
 
@@ -38,6 +40,22 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
             self.token_expires_at = None
             return True
         return False
+
+
+
+    def generate_password_token(self):
+        self.password_token = secrets.token_urlsafe(32)
+        self.password_token_expires_at = datetime.datetime.now() + datetime.timedelta(days=1)
+        return self.password_token
+
+    def check_for_reset_password(self, token):
+        if self.password_token == token and self.password_token_expires_at > datetime.datetime.now():
+            self.password_token = None
+            self.password_token_expires_at = None
+            return True
+        return False
+
+
 
     def __repr__(self):
         return f'<User> {self.id} {self.surname} {self.name}'

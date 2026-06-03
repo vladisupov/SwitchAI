@@ -163,10 +163,10 @@
                 const email = "{{email or ''}}";
                 
                 if (!email){
-                    resendMessage.innerText = "Ошибка: email не найден. Попробуйте зарегистрироваться снова";
+                    resendMessage.innerText = "Ошибка: email не найден.";
                     resendMessage.style.color = "red";
                     resendBtn.disabled = false;
-                    resend.resendBtn.style.opacity = "1";
+                    resendBtn.style.opacity = "1";
                     resendBtn.innerText = "Отправить письмо еще раз";
                     return;
                 }
@@ -174,7 +174,7 @@
                 const formData = new FormData();
                 formData.append("email", email);
 
-                fetch('/resend-verification', {
+                fetch('/resend_verification', {
                     method: 'POST',
                     body: formData
                 })
@@ -183,18 +183,23 @@
                     if (data.message){
                         resendMessage.innerText = data.message;
                         resendMessage.style.color = 'green';
+                        resendBtn.innerText = "Отправлено";
+                        // Кнопка разблокирутся через 30 секунд
+                        setTimeout(() => {
+                            resendBtn.disabled = false;
+                            resendBtn.style.opacity = '1';
+                            resendBtn.innerText = "Отправить письмо еще раз";
+                        }, 30000);
                     }
                     else if (data.error){
-                        resendMessage.innerText = 'Оштбка:' + data.error;
+                        resendMessage.innerText = 'Ошибка:' + data.error;
                         resendMessage.style.color = 'red';
+                        resendBtn.innerText = 'Отправить письмо еще раз';
+                        setTimeout(() => {
+                            resendBtn.disabled = false;
+                            resendBtn.style.opacity = '1';
+                        }, 10000);
                     }
-                    resendBtn.innerText = "Отправлено";
-                    // Кнопка разблокирутся через 30 секунд
-                    setTimeout(() => {
-                        resendBtn.disabled = false;
-                        resendBtn.style.opacity = '1';
-                        resendBtn.innerText = "Отправить письмо еще раз";
-                    }, 30000);
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -202,7 +207,7 @@
                     resendMessage.style.color = "red";
                     resendBtn.disabled = false;
                     resendBtn.opacity = "1";
-                    resendBtn.innerText = "Отправить письмо еще раз"
+                    resendBtn.innerText = "Отправить письмо еще раз";
                 });
             });
         }
