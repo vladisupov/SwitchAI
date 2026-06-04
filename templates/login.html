@@ -180,7 +180,6 @@
     const icon = button.querySelector('[data-lucide]'); 
 
     if (!input || !icon) {
-        console.error("Не найден инпут или иконка");
         return;
     }
 
@@ -202,24 +201,28 @@
         const messageP = document.getElementById("message-p");
 
         if (verify_link){
-            verify_link.addEventListener("click", function(){
+            verify_link.addEventListener("click", function(e){
+                e.preventDefault();
                 verify_link.disabled = true;
                 verify_link.style.color = "#8f8f8f";
                 verify_link.style.textDecoration = "none";
 
-                const email = "{{email or ''}}";
-                if (!email){
+                const emailInput = document.querySelector('input[type="email"]');
+                const email = emailInput ? emailInput.value : '';
+            
+
+                if (!email || email.trim() === ''){
                     verify_link.disabled = false;
                     verify_link.style.color = "#0000EE";
                     messageP.innerText = 'Ошибка: не предоставлен email. Введите email в поле и попробуйте еще раз';
-                    meaageP.style.color = 'red';
+                    messageP.style.color = 'red';
                     return;
                 }
 
-                const formData = new FormData;
+                const formData = new FormData();
                 formData.append("email", email);
 
-                fetch('/resend-verification', {
+                fetch('/resend_verification', {
                     method: 'POST',
                     body: formData
                 })
@@ -242,7 +245,6 @@
                     }, 30000);
                 })
                 .catch(error => {
-                    console.error('Error:', error);
                     messageP.innerText = 'Произошла ошибка при отправке.';
                     messageP.style.color = 'red';
                     verify_link.disabled = false;

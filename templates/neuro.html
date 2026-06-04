@@ -820,29 +820,6 @@
     </div>
 </div>
 <script>
-    //Установка высоты картнки на заднем фоне, чтобы убрать пробелы на телефонах
-    // function setBackgroundSize() {
-    //     const bg = document.querySelector('.background-img');
-        
-    //     if (bg) {
-
-    //         const correctHeight = Math.max(
-    //             document.body.scrollHeight,
-    //             window.innerHeight
-    //         );
-            
-    //         bg.style.height = `${correctHeight}px`;
-    //         bg.style.width = '100%';
-            
-    //         console.log('Background height set to:', correctHeight);
-    //     }
-    // }
-
-    // window.addEventListener('load', setBackgroundSize);
-    // window.addEventListener('resize', setBackgroundSize);
-    // window.addEventListener('orientationchange', setBackgroundSize);
-    //Обновление описания модели в зависимости от выбранной модели
-    UpdateTextarea();
     function UpdateTextarea(){
         const selected_value = document.getElementById('neuro-dropdown').value;
         const textarea = document.getElementById('description-area');
@@ -855,8 +832,8 @@
         ];
         textarea.textContent = neuro_descriptions[selected_value - 1];
     }
+    UpdateTextarea();
     //кнопка сгенерировать недоступна при пустом промпте
-    setBtnDisable();
     function setBtnDisable(){
         const generateBtn = document.getElementById("generate-btn");
         const promptArea = document.getElementById("prompt-area");
@@ -869,6 +846,7 @@
             }
         }
     }
+    setBtnDisable();
     //Отправление промпта и получение ответа от ии
     const generateBtn = document.getElementById("generate-btn");
     const promptArea = document.getElementById("prompt-area");
@@ -881,6 +859,21 @@
         "z-ai/glm-4.5-air:free",
         "openrouter/owl-alpha",
     ];
+    const allowedExtensions = ['.txt', '.json', '.csv'];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    function validateFile(file) {
+        const ext = '.' + file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(ext)) {
+            alert('Неподдерживаемый формат файла');
+            return false;
+        }
+        if (file.size > maxSize) {
+            alert('Файл слишком большой (макс. 5MB)');
+            return false;
+        }
+        return true;
+    }
     // Функция-помощник для чтения файла как текста
     function readFileAsText(file) {
         return new Promise((resolve, reject) => {
@@ -899,6 +892,9 @@
         if (fileInput.files && fileInput.files.length > 0) {
             try {
                 requestArea.innerHTML = "Читаю файл...";
+                if (!validateFile(fileInput.files[0])){
+                    return;
+                }
                 const fileContent = await readFileAsText(fileInput.files[0]);
                 
                 // Склеиваем основной промпт и содержимое файла
@@ -941,7 +937,6 @@
         //Если не получилось отправить запрос на сервер
         } catch (error) {
             requestArea.innerHTML = "Ошибка соединения с сервером";
-            console.error(error)
         //Возвращаем возможность кликать по кнопке
         } finally {
             generateBtn.disabled = false

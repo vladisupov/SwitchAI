@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -182,13 +184,30 @@
         -webkit-tap-highlight-color: rgba(0,0,0,0.1);
         transition: transform 0.3s ease;
     }
-    /* .mobile-btns:active {
-        outline: none;
-        transform: scale(0.95);
-        filter: brightness(90%);
-        transition: transform 0.1s ease-in-out;
-    } */
-    /* Responsive */
+    /* Для планшетов */
+    @media (min-width: 768px) and (max-width: 1024px) {
+        .neuro-part {
+            margin: 20px 2rem;
+        }
+        
+        .request-div {
+            height: 300px;
+        }
+    }
+
+    /* Для больших экранов */
+    @media (min-width: 1440px) {
+        .neuro-part {
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+    }
+    /* Для экранов с высоким DPI */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        .background-img::before {
+            background-image: url(/static/img/background_neuro@2x.png);
+        }
+    }
     @media (max-width: 800px) {                             /* мобильная версия */
         .navbar-nav-desktop, .navbar-buttons-desktop {
             display: none;
@@ -226,8 +245,11 @@
     <nav class="navbar">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
-                <img src="/static/img/logo%20SwitchAI.png" alt="SwitchAI logo">
-            </a>
+                <img src="/static/img/logo%20SwitchAI.png" 
+                    srcset="/static/img/logo%20SwitchAI-small.png 320w,
+                            /static/img/logo%20SwitchAI.png 640w"
+                    sizes="(max-width: 600px) 300px, 350px"
+                    alt="SwitchAI logo">
             <!-- Десктопная навигация -->
             <ul class="navbar-nav-desktop">
                 <li><a class="link" href="/">Главная</a></li>
@@ -289,6 +311,22 @@
     });
     // Теперь меню закрывается ТОЛЬКО кнопкой-крестиком, 
     // либо при переходе по ссылке (стандартное поведение браузера)
+
+    //Ленивая загрузка картинок
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('img[data-src]');
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    observer.unobserve(img);
+                }
+            });
+        });
+        
+        images.forEach(img => imageObserver.observe(img));
+    });
 </script>
 </body>
 </html>

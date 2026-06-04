@@ -202,7 +202,6 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
                     resendMessage.innerText = "Произошла ошибка при отправке";
                     resendMessage.style.color = "red";
                     resendBtn.disabled = false;

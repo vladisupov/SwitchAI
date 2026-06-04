@@ -291,7 +291,6 @@
         const bg = document.querySelector('.background-image');
         
         if (bg) {
-            // ✅ Используем scrollHeight вместо window.innerHeight
             const correctHeight = Math.max(
                 screen.availHeight,
                 window.innerHeight,
@@ -300,8 +299,6 @@
             
             bg.style.height = `${correctHeight}px`;
             bg.style.width = '100%';
-            
-            console.log('Background height set to:', correctHeight);
         }
     }
 

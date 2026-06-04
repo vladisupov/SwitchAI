@@ -13,6 +13,11 @@ from data.ai_responses import Responses
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from flask_compress import Compress
+from markupsafe import escape
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 
 load_dotenv()
 
@@ -24,10 +29,12 @@ PASSWORD = os.getenv('GMAIL_PASSWORD')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+Compress(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+limiter = Limiter(app, key_func=get_remote_address)
 
 def main():
     db_session.global_init("db/switch.db")
@@ -52,7 +59,7 @@ def send_verification_email(user_email, token):
         <body>
             <h2>Подтверждение email</h2>
             <p>Перейдите по ссылке для верификации:</p>
-            <a href="{verification_link}">{verification_link}</a>
+            <a href="{verification_link}">Нажмите здесь</a>
             <p>Ссылка действительна 24 часа</p>
         </body>
         </html>
@@ -109,7 +116,63 @@ def send_password_reset_email(user_email, token):
         print(f"Ошибка: {e}")
         return False
 
+#Кеширование статики
+@app.after_request
+def add_header(response):
+    if 'static' in request.path:
+        response.cache_control.max_age = 31536000  # 1 год
+    return response
 
+
+#Защита от Clickjacking
+@app.after_request
+def set_security_headers(response):
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    return response
+
+#CSP
+@app.after_request
+def security_headers(response):
+    # CSP для продакшена
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://unpkg.com https://code.jquery.com https://cdn.jsdelivr.net; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://stackpath.bootstrapcdn.com; "
+        "img-src 'self' data: blob: https://openrouter.ai; "
+        "font-src 'self' https://fonts.gstatic.com data:; "
+        "connect-src 'self' https://openrouter.ai; "
+        "frame-src 'none'; "
+        "object-src 'none'; "
+        "base-uri 'self'; "
+        "form-action 'self'; "
+        "upgrade-insecure-requests; "
+        "block-all-mixed-content;"
+    )
+
+    # Дополнительные заголовки безопасности
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+
+    return response
+#endpoint для CSP
+@app.route('/csp-report', methods=['POST'])
+def csp_report():
+    report = request.json
+    print(f"CSP нарушение: {report}")
+    # Логируйте нарушения для отладки
+    return '', 204
+
+@app.after_request
+def set_csp_headers(response):
+    response.headers['Content-Security-Policy'] = (
+        # ... ваши правила ...
+        "report-uri /csp-report;"
+    )
+    return response
 # ------------------------------------------------Главная страница сайта-------------------------------------------
 
 @app.route("/")
@@ -314,6 +377,7 @@ def neuro():
 # Здесь будет обрабатываться запрос с javascript,
 # отправление запроса и получение ответа без обновления страницы
 @app.route('/neuro_request', methods=['POST'])
+@limiter.limit("5 per minute")
 def neuro_request():
     data = request.json
     user_prompt = data.get('prompt', '')
@@ -341,7 +405,7 @@ def neuro_request():
         result = response.json()
 
         try:
-            ai_message = result['output'][-1]['content'][0]['text']
+            ai_message = escape(result['output'][-1]['content'][0]['text'])
             ai_response = Responses(  # Добавление запроса и ответа в таблицу
                 user_id=current_user.id,
                 model=model,
