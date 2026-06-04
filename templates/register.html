@@ -205,27 +205,27 @@
     // Инициализация иконок
     lucide.createIcons();
     function togglePassword(inputId, button) {
-    const input = document.getElementById(inputId);
-    // Ищем элемент, у которого есть атрибут data-lucide
-    const icon = button.querySelector('[data-lucide]'); 
+        const input = document.getElementById(inputId);
+        // Ищем элемент, у которого есть атрибут data-lucide
+        const icon = button.querySelector('[data-lucide]'); 
 
-    if (!input || !icon) {
-        console.error("Не найден инпут или иконка");
-        return;
-    }
+        if (!input || !icon) {
+            console.error("Не найден инпут или иконка");
+            return;
+        }
 
-    if (input.type === 'password') {
-        input.type = 'text';
-        input.style.outline = 'none';
-        icon.setAttribute('data-lucide', 'eye-off');
-    } else {
-        input.type = 'password';
-        input.style.outline = 'none';
-        icon.setAttribute('data-lucide', 'eye');
+        if (input.type === 'password') {
+            input.type = 'text';
+            input.style.outline = 'none';
+            icon.setAttribute('data-lucide', 'eye-off');
+        } else {
+            input.type = 'password';
+            input.style.outline = 'none';
+            icon.setAttribute('data-lucide', 'eye');
+        }
+        
+        // Перерисовываем иконки, чтобы Lucide заменил атрибут на новый SVG
+        lucide.createIcons();
     }
-    
-    // Перерисовываем иконки, чтобы Lucide заменил атрибут на новый SVG
-    lucide.createIcons();
-}
 </script>
 {% endblock %}
