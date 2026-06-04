@@ -16,7 +16,8 @@
         height: 70px;
         width: 100%;
         max-width: 300px;
-        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+        transition: transform 0.1s ease, filter 0.1s ease;
+        -webkit-tap-highlight-color: transparent;
         margin-top: 30px;
     }
     @media (hover: hover){
@@ -69,6 +70,7 @@
         outline: none;
     }
     .message-div{
+        margin: 10px 0;
         width: auto;
         display: flex;
         flex-direction: column;
@@ -92,7 +94,7 @@
         font-weight: 800;
     }
     .reg-form {
-        max-width: 400px;
+        max-width: 300px;
         margin: 0 auto;
         padding: 20px;
     }
@@ -114,7 +116,11 @@
             height: 113px;
         }
         .message-div p{
+            margin: 0;
             font-size: 12px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
     }
     .button-div{
@@ -192,7 +198,7 @@
                 {% endif %}
             </div>
         {% endif %}
-        <div class="dont-have-account">
+        <div class="dont-have-account" style="margin-top: 20px;">
             <p>Уже есть аккаунт?</p>
             <a href="/login">Войти</a>
         </div>

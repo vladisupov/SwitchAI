@@ -77,7 +77,8 @@
         text-decoration: none;
         text-align: center;
         color: black;
-        transition: transform 0.3s ease;
+        transition: transform 0.1s ease, filter 0.1s ease;
+        -webkit-tap-highlight-color: transparent;
     }
     @media (hover: hover){
         .btn-nav:hover{
@@ -181,8 +182,8 @@
         flex-direction: column;
         gap: 1rem;
         width: 80%;
-        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
+        transition: transform 0.1s ease, filter 0.1s ease;
+        -webkit-tap-highlight-color: transparent;
     }
     /* Для планшетов */
     @media (min-width: 768px) and (max-width: 1024px) {
@@ -240,93 +241,93 @@
         padding-top: 0;
     }
 </style>
-<body>
-<header>
-    <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">
-                <img src="/static/img/logo%20SwitchAI.png" 
-                    srcset="/static/img/logo%20SwitchAI-small.png 320w,
-                            /static/img/logo%20SwitchAI.png 640w"
-                    sizes="(max-width: 600px) 300px, 350px"
-                    alt="SwitchAI logo">
-            <!-- Десктопная навигация -->
-            <ul class="navbar-nav-desktop">
-                <li><a class="link" href="/">Главная</a></li>
-                <li><a class="link" href="/neuro">Нейросети</a></li>
-                <li><a class="link" href="#">О нас</a></li>
-            </ul>
-            <div class="navbar-buttons-desktop">
-                {% if current_user.is_authenticated %}
-                    <a class="link" href="/logout">{{ current_user.name }} {{ current_user.surname }}</a>
-                {% else %}
-                    <a class="btn-nav" id="register-btn" href="/register">Регистрация</a>
-                    <a class="btn-nav" id="login-btn" href="/login">Вход</a>
-                {% endif %}
+<body ontouchstart="">
+    <header>
+        <nav class="navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <img src="/static/img/logo%20SwitchAI.png" 
+                        srcset="/static/img/logo%20SwitchAI-small.png 320w,
+                                /static/img/logo%20SwitchAI.png 640w"
+                        sizes="(max-width: 600px) 300px, 350px"
+                        alt="SwitchAI logo">
+                <!-- Десктопная навигация -->
+                <ul class="navbar-nav-desktop">
+                    <li><a class="link" href="/">Главная</a></li>
+                    <li><a class="link" href="/neuro">Нейросети</a></li>
+                    <li><a class="link" href="#">О нас</a></li>
+                </ul>
+                <div class="navbar-buttons-desktop">
+                    {% if current_user.is_authenticated %}
+                        <a class="link" href="/logout">{{ current_user.name }} {{ current_user.surname }}</a>
+                    {% else %}
+                        <a class="btn-nav" id="register-btn" href="/register">Регистрация</a>
+                        <a class="btn-nav" id="login-btn" href="/login">Вход</a>
+                    {% endif %}
+                </div>
+                <!-- Кнопка Бургер/Крестик -->
+                <button class="burger-toggle" id="menuBtn" aria-label="Toggle Navigation">
+                    <span class="burger-icon"></span>
+                </button>
             </div>
-            <!-- Кнопка Бургер/Крестик -->
-            <button class="burger-toggle" id="menuBtn" aria-label="Toggle Navigation">
-                <span class="burger-icon"></span>
-            </button>
+        </nav>
+    </header>
+    <!-- Полноэкранное меню -->
+    <div class="mobile-overlay" id="mobileMenu">
+        
+        <a href="/">Главная</a>
+        <a href="/neuro">Нейросети</a>
+        <a href="#">О нас</a>
+        
+        <div class="mobile-btns">
+            {% if current_user.is_authenticated %}
+                <a href="/logout" class="text-center" style="font-size: 1.2rem;">{{ current_user.name }} {{ current_user.surname }}</a>
+            {% else %}
+                <a class="btn-nav" id="register-btn" href="/register">Регистрация</a>
+                <a class="btn-nav" id="login-btn" href="/login">Вход</a>
+            {% endif %}
         </div>
-    </nav>
-</header>
-<!-- Полноэкранное меню -->
-<div class="mobile-overlay" id="mobileMenu">
-    
-    <a href="/">Главная</a>
-    <a href="/neuro">Нейросети</a>
-    <a href="#">О нас</a>
-    
-    <div class="mobile-btns">
-        {% if current_user.is_authenticated %}
-            <a href="/logout" class="text-center" style="font-size: 1.2rem;">{{ current_user.name }} {{ current_user.surname }}</a>
-        {% else %}
-            <a class="btn-nav" id="register-btn" href="/register">Регистрация</a>
-            <a class="btn-nav" id="login-btn" href="/login">Вход</a>
-        {% endif %}
     </div>
-</div>
-<main class="main-container">
-    {% block content %}{% endblock %}
-</main>
-<script>
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const body = document.body;
-    // Единый обработчик для кнопки-переключателя
-    menuBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Переключаем классы
-        const isActive = menuBtn.classList.toggle('active');
-        mobileMenu.classList.toggle('active');
-        
-        // Управляем прокруткой страницы
-        if (isActive) {
-            body.style.overflow = 'hidden';
-        } else {
-            body.style.overflow = '';
-        }
-    });
-    // Теперь меню закрывается ТОЛЬКО кнопкой-крестиком, 
-    // либо при переходе по ссылке (стандартное поведение браузера)
-
-    //Ленивая загрузка картинок
-    document.addEventListener('DOMContentLoaded', function() {
-        const images = document.querySelectorAll('img[data-src]');
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    observer.unobserve(img);
-                }
-            });
+    <main class="main-container">
+        {% block content %}{% endblock %}
+    </main>
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const body = document.body;
+        // Единый обработчик для кнопки-переключателя
+        menuBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Переключаем классы
+            const isActive = menuBtn.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            
+            // Управляем прокруткой страницы
+            if (isActive) {
+                body.style.overflow = 'hidden';
+            } else {
+                body.style.overflow = '';
+            }
         });
-        
-        images.forEach(img => imageObserver.observe(img));
-    });
-</script>
+        // Теперь меню закрывается ТОЛЬКО кнопкой-крестиком, 
+        // либо при переходе по ссылке (стандартное поведение браузера)
+
+        //Ленивая загрузка картинок
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img[data-src]');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            
+            images.forEach(img => imageObserver.observe(img));
+        });
+    </script>
 </body>
 </html>

@@ -34,7 +34,13 @@ Compress(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-limiter = Limiter(app, key_func=get_remote_address)
+try:
+    limiter = Limiter(key_func=get_remote_address)
+    limiter.init_app(app)
+    print("Rate limiter initialized")
+except Exception as e:
+    print(f"Rate limiter not initialized: {e}")
+    limiter = None
 
 def main():
     db_session.global_init("db/switch.db")
