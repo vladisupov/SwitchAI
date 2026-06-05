@@ -20,8 +20,30 @@
     <link rel="icon" href="/static/img/icons/icon192x192.png" sizes="192x192" type="image/png">
     <link rel="icon" href="/static/img/icons/icon%20512x512.png" sizes="512x512" type="image/png">
 
-
-    <title>{{title}}</title>
+    <title>{% block title %}SwitchAI — Переключи реальность{% endblock %}</title>
+    <meta name="description" content="{% block description %}Онлайн-платформа SwitchAI: доступ к лучшим нейросетям в одном месте. Генерация текста, кода и изображений с помощью ИИ.{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}нейросети, ИИ, SwitchAI, генерация текста, искусственный интеллект{% endblock %}">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="{% block og_title %}SwitchAI — Переключи реальность{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Платформа для работы с нейросетями от NVIDIA, Google и OpenRouter.{% endblock %}">
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SwitchAI",
+    "url": "{{ request.url_root }}",
+    "description": "Онлайн-платформа для работы с нейросетями. Генерация текста с помощью ИИ.",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "{{ request.url_root }}neuro?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+    }
+    }
+</script>
 </head>
 <style>
     :root {
@@ -196,13 +218,6 @@
         }
     }
 
-    /* Для больших экранов */
-    @media (min-width: 1440px) {
-        .neuro-part {
-            max-width: 1200px;
-            margin: 20px auto;
-        }
-    }
     /* Для экранов с высоким DPI */
     @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
         .background-img::before {

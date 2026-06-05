@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, render_template, redirect, request, make_response, jsonify
+from flask import Flask, render_template, redirect, request, make_response, jsonify, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from data import db_session
 from data.users import User
@@ -17,6 +17,7 @@ from flask_compress import Compress
 from markupsafe import escape
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask import render_template_string
 
 
 load_dotenv()
@@ -179,6 +180,31 @@ def set_csp_headers(response):
         "report-uri /csp-report;"
     )
     return response
+
+
+#Карта сайта
+@app.route('/sitemap.xml')
+def sitemap():
+    # Список всех статических URL вашего сайта
+    pages = [
+        {'loc': url_for('index', _external=True), 'priority': '1.0', 'changefreq': 'daily'},
+        {'loc': url_for('neuro', _external=True), 'priority': '0.9', 'changefreq': 'weekly'},
+        {'loc': url_for('login', _external=True), 'priority': '0.5', 'changefreq': 'monthly'},
+        # Добавьте сюда все ваши значимые страницы
+    ]
+
+    sitemap_xml = render_template_string('''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% for page in pages %}
+  <url>
+    <loc>{{ page.loc }}</loc>
+    <priority>{{ page.priority }}</priority>
+    <changefreq>{{ page.changefreq }}</changefreq>
+  </url>
+{% endfor %}
+</urlset>''', pages=pages)
+    return sitemap_xml, 200, {'Content-Type': 'application/xml'}
+
 # ------------------------------------------------Главная страница сайта-------------------------------------------
 
 @app.route("/")

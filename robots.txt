@@ -1,0 +1,59 @@
+# robots.txt для SwitchAI
+
+# Разрешаем всем роботам
+User-agent: *
+
+# Основные разрешения
+Allow: /
+Allow: /neuro
+Allow: /static/
+Allow: /static/css/
+Allow: /static/js/
+Allow: /static/img/
+
+# Запрещаем приватные страницы
+Disallow: /login
+Disallow: /register
+Disallow: /logout
+Disallow: /verify
+Disallow: /resend_verification
+Disallow: /forgot_password
+Disallow: /send_password_email
+Disallow: /reset_password
+Disallow: /change_password
+Disallow: /neuro_request
+Disallow: /admin
+Disallow: /db/
+Disallow: /instance/
+
+# Запрещаем динамические параметры
+Disallow: /*?*
+Disallow: /*&*
+
+# Запрещаем служебные страницы
+Disallow: /error404
+Disallow: /500
+
+# Настройка для Googlebot
+User-agent: Googlebot
+Allow: /
+Disallow: /login
+Disallow: /register
+Disallow: /verify
+Disallow: /neuro_request
+Crawl-delay: 10
+
+# Настройка для Yandex
+User-agent: Yandex
+Allow: /
+Disallow: /login
+Disallow: /register
+Disallow: /verify
+Disallow: /neuro_request
+Crawl-delay: 10
+
+# Для всех остальных ботов
+User-agent: *
+Crawl-delay: 5
+Disallow: /db/
+Disallow: /instance/

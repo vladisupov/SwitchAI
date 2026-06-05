@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-
+{% block title %}Генератор контента | Нейросети SwitchAI{% endblock %}
+{% block description %}Попробуйте лучшие нейросети для генерации текста: Nemotron, GLM-4.5, Owl Alpha. Создавайте контент с помощью ИИ онлайн.{% endblock %}
+{% block keywords %}генератор текста, нейросеть онлайн, Nemotron, GLM, Owl Alpha{% endblock %}
 {% block content %}
 <meta charset="UTF-8">
 <style>
@@ -66,7 +68,7 @@
         border: 1px solid #2d3a53;
         border-radius: 10px;        
     }
-    .neuro-choice p{
+    .neuro-choice h3{
         font-weight: 800;
         font-size: 1rem;
         margin-bottom: 10px;
@@ -129,7 +131,7 @@
         padding: 0.5rem 1rem;
         border-radius: 10px 0 0 10px;
     }
-    .prompt-div p{
+    .prompt-div h3{
         font-size: 1rem;
         font-weight: 800;
     }
@@ -160,7 +162,7 @@
         padding: 0.5rem 1rem;
         border-radius: 0 10px 10px 0;
     }
-    .params-div p{
+    .params-div h3{
         font-size: 1rem;
         font-weight: 800;
     }
@@ -346,11 +348,11 @@
             box-sizing: border-box;
             padding-bottom: 40px; /* Отступ в самом низу, чтобы не было полос */
         }
-        .params-div p{
+        .params-div h3{
             font-size: 1rem;
             font-weight: 800;
         }
-        .prompt-div p{
+        .prompt-div h3{
             font-size: 1rem;
             font-weight: 800;
         }
@@ -422,7 +424,7 @@
         margin-top: 10px;
         padding: 0;
     }
-    .response-div p {
+    .response-div h3{
         margin: 0.5rem 1rem;
         font-size: 1rem;
         font-weight: 800;
@@ -469,17 +471,6 @@
             transform: translateZ(0);
             -webkit-transform: translateZ(0);
         }
-            
-        /* .background-img::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
-            pointer-events: none;
-        } */
 
         .neuro-part {
             position: relative;
@@ -514,7 +505,7 @@
             padding: 0.5rem 0.5rem;
             border-radius: 10px 10px 0 0;
         }
-        .prompt-div p{
+        .prompt-div h3{
             font-size: 1rem;
             font-weight: 800;
         }
@@ -543,7 +534,7 @@
             padding: 0.5rem 0.5rem;
             border-radius: 0 0 10px 10px;
         }
-        .params-div p{
+        .params-div h3{
             font-size: 1rem;
             font-weight: 800;
             margin-bottom: 0.5rem;
@@ -585,7 +576,7 @@
             align-items: center;
             -webkit-tap-highlight-color: rgba(0,0,0,0.1);
         }                
-        .response-div p {
+        .response-div h3{
             margin: 0.5rem 0.5rem;
             font-size: 1rem;
             font-weight: 800;
@@ -602,7 +593,7 @@
             border: 1px solid #2d3a53;
             border-radius: 10px;        
         }
-        .neuro-choice p{
+        .neuro-choice h3{
             font-weight: 800;
             font-size: 1rem;
             margin-bottom: 10px;
@@ -640,7 +631,7 @@
             color: #e5e3e3;
             margin: 10px 5px;
         }
-        .prompt-div p{
+        .prompt-div h3{
             margin: 0.5rem 0.5rem;
             margin-top: 0;
         }
@@ -681,7 +672,7 @@
     <div class="neuro-part">
         <h1>SwitchAI — переключи реальность</h1>
         <div class="neuro-choice">
-            <p>Выбор нейросети</p>
+            <h3>Выбор нейросети</h3>
             <div class="choice-part">
                 <select class="neuro-dropdown" id="neuro-dropdown" onchange="UpdateTextarea()">
                     <option value="1">Nvidia nemotron-3-super-120b-a12b</option>
@@ -694,11 +685,11 @@
         </div>
         <div class="request-div">
             <div class="prompt-div">
-                <p>Ваш промт</p>
+                <h3>Ваш промт</h3>
                 <textarea class="prompt-area" id="prompt-area" placeholder="Опишите вашу задачу или задайте вопрос" onchange="setBtnDisable()"></textarea>
             </div>
             <div class="params-div">
-                <p>Параметры</p>
+                <h3>Параметры</h3>
                 <!-- Форма для загрузки файла -->
                 <div class="file-upload-wrapper">
                     <label for="fileInput" class="custom-file-label">
@@ -715,7 +706,7 @@
             </div>
         </div>
         <div class="response-div">
-            <p>Сгенерированный текст</p>
+            <h3>Сгенерированный текст</h3>
             <div class="generated-text">
                 <textarea disabled class="generated-text-area" id="generated-text-area" placeholder="Напиши запрос и здесь появится ответ нейросети"></textarea>
             </div>
