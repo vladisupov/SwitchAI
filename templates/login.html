@@ -204,6 +204,22 @@
     // Перерисовываем иконки, чтобы Lucide заменил атрибут на новый SVG
     lucide.createIcons();
     }
+    //Функция-таймер
+    function countdown(seconds, onTick, onComplete){
+        let remaining = seconds;
+
+        const interval = setInterval(() => {
+            if (remaining <= 0){
+                clearInterval(interval);
+                onComplete?.();
+            }
+            else {
+                remaining--;
+            onTick?.(remaining);
+            }
+        }, 1000)
+
+    }
 
     //Повторная отправка верификационного письма
     document.addEventListener("DOMContentLoaded", function(){
@@ -214,6 +230,7 @@
             verify_link.addEventListener("click", function(e){
                 e.preventDefault();
                 verify_link.disabled = true;
+                console.log(1);
                 verify_link.style.color = "#8f8f8f";
                 verify_link.style.textDecoration = "none";
 
@@ -247,12 +264,17 @@
                         messageP.style.color = 'red';
                     }
                     verify_link.innerText = 'Отправлено';
-                    //Ссылка станет доступной через 30 секунд
-                    setTimeout(() => {
-                        verify_link.disabled = false;
-                        verify_link.style.color = '#0000EE';
-                        verify_link.innerText = "Отправить письмо еще раз";
-                    }, 30000);
+                    //Таймер для повторной отправки
+                    countdown(
+                        30, 
+                        (remaining) => verify_link.innerText = `Отпраить повторно через ${remaining} сек`,
+                        () => {
+                            verify_link.disabled = false;
+                            verify_link.style.color = '#0000EE';
+                            verify_link.innerText = "Отправить письмо еще раз";
+                            messageP.innerText = '';
+                        }
+                    );
                 })
                 .catch(error => {
                     messageP.innerText = 'Произошла ошибка при отправке.';

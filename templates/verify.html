@@ -27,7 +27,7 @@
         border: 1px solid #c5c5c5;
         border-radius: 15px;
         box-shadow: 0 0 7px #8f8f8f;
-        width: 60vw;
+        width: 90%;
         max-width: 450px;
         height: 530px;
     }
@@ -95,6 +95,9 @@
         margin: 0;
         margin-top: 10px;
     }
+    #timer{
+        margin: 0;
+    }
     @media (hover: hover){
         .buttons:hover{
             text-decoration: none;
@@ -117,6 +120,7 @@
             font-size: 12px;
             width: auto;
             min-width: 150px;
+            margin-top: 0;
         }
         .container h2{
             font-size: 1rem;
@@ -130,6 +134,15 @@
         #resend-message{
             font-size: 12px;
         }
+        #timer{
+            font-size: 12px;
+        }
+        .container img {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        width: 100px;
+        height: 100px;
+    }
     }
 </style>
 <div class="background-div">
@@ -139,8 +152,9 @@
             <h2>Электронная почта подтверждена</h2>
             <div class="messages">
                 <p>{{message}}</p>
-            <p>Вы можете выполнить вход</p>
+                <p>Вы можете выполнить вход</p>
             </div>
+            
             <button class="buttons" id="entry-btn" onclick="location.href='/login'">Вход</button>
             <a href="/">на главную</a>
         {% else %}
@@ -152,15 +166,34 @@
             </div>
             <button class="buttons" id="resend-btn">Отправить письмо еще раз</button>
             <p id="resend-message"></p>
+            <p id="timer"></p>
             <a href="/">на главную</a>
         {% endif %}
     </div>
 </div>
 <script>
+    //Функция-таймер
+    function countdown(seconds, onTick, onComplete){
+        let remaining = seconds;
+
+        const interval = setInterval(() => {
+            if (remaining <= 0){
+                clearInterval(interval);
+                onComplete?.();
+            }
+            else {
+                remaining--;
+            onTick?.(remaining);
+            }
+        }, 1000)
+
+    }
+
     //Повторная отправка верификауионного письма по нажатию на кнопку
     document.addEventListener("DOMContentLoaded", function(){
         const resendBtn = document.getElementById("resend-btn");
         const resendMessage = document.getElementById("resend-message");
+        const timer = document.getElementById("timer");
 
         //Подвязываем к кнопке отправить письмо еще раз событие для отправки письма
         if (resendBtn){
@@ -192,23 +225,23 @@
                     if (data.message){
                         resendMessage.innerText = data.message;
                         resendMessage.style.color = 'green';
-                        resendBtn.innerText = "Отправлено";
-                        // Кнопка разблокирутся через 30 секунд
-                        setTimeout(() => {
-                            resendBtn.disabled = false;
-                            resendBtn.style.opacity = '1';
-                            resendBtn.innerText = "Отправить письмо еще раз";
-                        }, 30000);
                     }
                     else if (data.error){
                         resendMessage.innerText = 'Ошибка:' + data.error;
                         resendMessage.style.color = 'red';
-                        resendBtn.innerText = 'Отправить письмо еще раз';
-                        setTimeout(() => {
+                    }
+                    resendBtn.innerText = "Отправлено";
+                    //Таймер для повторной отправки
+                    countdown(
+                        30, 
+                        (remaining) => timer.innerText = `Отпраить повторно через ${remaining} сек`,
+                        () => {
                             resendBtn.disabled = false;
                             resendBtn.style.opacity = '1';
-                        }, 10000);
-                    }
+                            resendBtn.innerText = "Отправить письмо еще раз";
+                            timer.innerText = '';
+                        }
+                    );
                 })
                 .catch(error => {
                     resendMessage.innerText = "Произошла ошибка при отправке";
