@@ -396,6 +396,17 @@ def change_password():
     db_sess.commit()
     return jsonify({"message": "Пароль установлен"})
 
+@app.route('/profile/<int:id>')
+def profile(id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == id).first()
+    if not user:
+        return jsonify({"error": "Пользователь не найден"}), 404
+
+    return render_template('user_profile.html', user=user)
+
+
+
 
 # --------------------------------------------Страница с нейросетями---------------------------------------
 @app.route('/neuro')
@@ -416,9 +427,9 @@ def neuro_request():
     model = data.get('model', '')
 
     if not (user_prompt):
-        return jsonify({'error': 'No prompt provided'}), 400
+        return jsonify({'error': 'Промпт не предоставлен'}), 400
     if not (model):
-        return jsonify({'error': 'No model provided'}), 400
+        return jsonify({'error': 'Модель не предоставлена'}), 400
 
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",

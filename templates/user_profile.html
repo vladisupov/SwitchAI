@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ current_user.name }} {{ current_user.surname }} | Личный кабинет SwitchAI{% endblock %}
+
+{% block description %}Управляйте своим профилем на SwitchAI: просматривайте историю запросов к нейросетям, управляйте подпиской и настройками аккаунта.{% endblock %}
+
+{% block keywords %}личный кабинет, профиль, SwitchAI, история запросов, управление аккаунтом{% endblock %}
+
+{% block og_title %}Личный кабинет {{ current_user.name }} | SwitchAI{% endblock %}
+
+{% block og_description %}Управляйте своим профилем и подпиской на платформе SwitchAI.{% endblock %}
+
+<!-- Важно: запрещаем индексацию личной страницы -->
+{% block extra_meta %}
+<meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+{% block content %}
+<meta charset="UTF-8">
+<div clss="background-image">
+    <div class="content">
+        <div class="menu-bar">
+            <a href="#">Профиль</a>
+            <a href="#">История запросов</a>
+            <a href="/logout">Выйти</a>
+        </div>
+        <div class="profile-content">
+            <div class="personal-data">
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
