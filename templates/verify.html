@@ -48,6 +48,15 @@
         max-width: 350px;
         height: 50px;
     }
+    .buttons:focus{
+        outline: none;
+    }
+    .buttons:active{
+        outline: none;
+        transform: scale(0.95);
+        filter: brightness(90%);
+        transition: transform 0.1s ease-in-out;
+    }
     #resend-btn{
         background-color: #00E6FF;
         box-shadow: 0 0 7px #00E6FF;
@@ -138,11 +147,11 @@
             font-size: 12px;
         }
         .container img {
-        margin-top: 10px;
-        margin-bottom: 20px;
-        width: 100px;
-        height: 100px;
-    }
+            margin-top: 10px;
+            margin-bottom: 20px;
+            width: 100px;
+            height: 100px;
+        }
     }
 </style>
 <div class="background-div">

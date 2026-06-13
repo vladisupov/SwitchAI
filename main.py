@@ -400,6 +400,10 @@ def change_password():
 def profile(id):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == id).first()
+    if not current_user.is_authenticated:
+        return jsonify({"error":"Доступ запрещен"})
+    if id != current_user.id:
+        return jsonify({"error":"Вы можете просматривать только свою страницу профиля"})
     if not user:
         return jsonify({"error": "Пользователь не найден"}), 404
 

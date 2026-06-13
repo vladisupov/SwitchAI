@@ -17,18 +17,321 @@
 
 {% block content %}
 <meta charset="UTF-8">
-<div clss="background-image">
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .background-image{
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        background-image: url("/static/img/error404bg.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        min-height: 100dvh;
+        min-height: -webkit-fill-available;
+        position: relative;
+    }
+    .content{
+        width: 100vw;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 2rem 2rem;
+    }
+    /* .menu-bar{
+        display: flex;
+        flex-direction: column;
+        width: 20%;
+        height: 70%;
+        border: 1px solid #1f2c44;
+        border-radius: 10px;
+        background-color: #13233c;
+    }
+    .menu-bar a {
+        color: white;
+        text-decoration: none;
+        width: auto;
+        margin: 0.5rem 0.5rem;
+        font-size: 1rem;
+        font-weight: 800;
+        align-items: center;
+        opacity: 0.5;
+        height: 40px;
+        display: flex;
+        background-color: transparent;
+        padding: 0rem 0.5rem;
+    }
+    .menu-bar a:focus{
+        opacity: 1;
+        background-color: #2a3756;
+        text-decoration: none;
+        color: white;
+        border-radius: 5px;
+    }
+    .menu-bar a img{
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+    } */
+    .profile-content{
+        margin: 0 1rem;
+        width: 100%;
+        max-width: 900px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+    .personal-data{
+        width: 100%;
+        height: 30%;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        background-color: #2a3756;
+        border: 1px solid #1f2c44;
+        border-radius: 10px;
+        background-color: #13233c;
+        color: white;
+        padding: 0.5rem 0;
+        align-items: center;
+    }
+    .personal-data p{
+        font-weight: 200;
+        font-size: 1rem;
+        margin: 0;
+    }
+    .personal-data h2{
+        font-weight: 800;
+        margin: 0;
+        margin-top: 10px;
+    }
+    .images{
+        width: 100%;
+        height: 70%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        padding: 0.5rem 0.5rem;
+    }
+    .edit-div{
+        width: calc((100% - 1rem) / 3);
+        display: flex;
+        justify-content: flex-start;
+    }
+    .ava-div{
+        width: calc((100% - 1rem) / 3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .logout-div{
+        width: calc((100% - 1rem) / 3);
+        display: flex;
+        justify-content: flex-end;
+    }
+    .images a{
+        font-size: 1rem;
+        color: white;
+        text-decoration: none;
+        display: flex;
+        opacity: 0.5;
+        height: 40px;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: auto;
+    }
+    .images a:hover{
+        text-decoration: none;
+        opacity: 0.7;
+    }
+    .ava-div img{
+        width: 150px;
+        height: 150px;
+        border-radius: 75px;
+        margin-bottom: 15px;
+    }
+    .recent-div{
+        width: 100%;
+        height: 40%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    .recent-div-content{
+        width: 50%;
+        height: 100%;
+        border: 1px solid #1f2c44;
+        border-radius: 10px;
+        background-color: #13233c;
+        color: white;
+        padding: 0.5rem 0.5rem;
+    }
+    #recent-req{
+        margin-right: 5px;
+    }
+    #recent-neuro{
+        margin-left: 5px;
+    }
+    .recent-text{
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+    }
+    .recent-text h4{
+        font-size: 1rem;
+        font-weight: 800;
+        width: 220px;
+    }
+    .recent-text a{
+        width: calc(100% - 220px);
+        text-align: end;
+        color: #00E6FF;
+        text-decoration: none;
+        font-size: 14px;
+    }
+    .recent-text a:hover{
+        text-decoration: none;
+        opacity: 0.5;
+    }
+    .recent-text a:focus{
+        transform: scale(0.95);
+        transition: transform 0.1s ease-in-out;
+    }
+    @media (max-width: 800px){
+        .content{
+            padding: 1rem 1rem;
+        }
+        .profile-content{
+            margin: 0;
+        }
+    }
+    @media (max-width: 640px){
+        .images{
+            padding: 0;
+        }
+        .images a{
+            font-size: 12px;
+        }
+        .recent-div{
+            flex-direction: column;
+            height: auto;
+        }
+        .recent-div-content{
+            width: 100%;
+            height: 300px;
+        }
+        #recent-req{
+            margin: 0;
+            margin-bottom: 0.5rem;
+        }
+        #recent-neuro{
+            margin: 0;
+            margin-top: 0.5rem;
+        }
+    }
+    @media (max-width: 450px){
+        .ava-div{
+            align-items: end;
+        }
+        .ava-div img{
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+        }
+        .personal-data h2{
+            font-size: 1.5rem;
+        }
+        .personal-data p{
+            font-size: 1rem;
+        }
+        .recent-text{
+            justify-content: space-between;
+        }
+        .recent-text h4{
+            width: auto;
+        }
+        .recent-text a{
+            width: auto;
+        }
+    }
+</style>
+<div class="background-image">
     <div class="content">
-        <div class="menu-bar">
-            <a href="#">Профиль</a>
-            <a href="#">История запросов</a>
-            <a href="/logout">Выйти</a>
-        </div>
+        <!-- <div class="menu-bar">
+            <a href="#"><span><img src="/static/img/profile_icon.png" alt="Профиль"></span> Профиль</a>
+            <a href="#"><span><img src="/static/img/history_icon.png" alt="История" style="width: 30px; height: 25px;">История запросов</a>
+            <a href="/logout"><span><img src="/static/img/logout_icon.png" alt="Выйти" style="width: 30px; height: 25px;">Выйти</a>
+        </div> -->
         <div class="profile-content">
             <div class="personal-data">
-                
+                <div class="images">
+                    <div class="edit-div">
+                        <a href="#" id="edit"><span><img src="/static/img/edit_icon.png" alt="Редактировать" style="width: 25px; height: 27px; margin-right: 5px;"></span>Редактировать</a>
+                    </div>
+                    <div class="ava-div"><img src="/static/img/default_ava.png" alt="Аватар"></div>
+                    <div class="logout-div">
+                        <a href="/logout" id="logout">Выйти<span><img src="/static/img/logout_icon.png" alt="Выйти" style="width: 25px; height: 23px; margin-left: 5px;"></span></a>
+                    </div>
+                </div>
+                <h2>{{ current_user.name }} {{ current_user.surname }}</h2>
+                <p>{{ current_user.email }}</p>
+            </div>
+            <div class="recent-div">
+                <div class="recent-div-content" id="recent-req">
+                    <div class="recent-text">
+                        <h4>Недавние запросы</h4>
+                        <a href="#" id="all-requests">Смотреть все</a>
+                    </div>
+                </div>
+                <div class="recent-div-content" id="recent-neuro">
+                    <div class="recent-text">
+                        <h4>Используемые нейросети</h4>
+                        <a href="#" id="all-neuro">Смотреть все</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    const allReq = document.getElementById("all-requests");
+    const allNeuro = document.getElementById("all-neuro");
+    const editLink = document.getElementById("edit");
+    const logoutLink = document.getElementById("logout");
+    function setLinkText(){
+        if (!allReq || !allNeuro) return;
+        if (window.innerWidth <= 800 && window.innerWidth > 640){
+            allReq.innerText = "См. все";
+            allNeuro.innerText = "См. все";
+        }
+        else{
+            allReq.innerText = "Смотреть все";
+            allNeuro.innerText = "Смотреть все";
+        }
+        if (!editLink || !logoutLink) return;
+        if (window.innerWidth <= 500){
+            editLink.innerHTML = "<img src='/static/img/edit_icon.png' alt='Редактировать' style='width: 25px; height: 27px; margin-right: 5px;'>";
+            logoutLink.innerHTML = '<img src="/static/img/logout_icon.png" alt="Выйти" style="width: 25px; height: 23px; margin-left: 5px;">';
+        }
+        // else{
+        //     logoutLink.innerHTML = '<a href="/logout" id="logout">Выйти<span><img src="/static/img/logout_icon.png" alt="Выйти" style="width: 30px; height: 25px; margin-left: 5px;"></span></a>';
+        //     editLink.innerHTML = '<a href="#" id="edit"><span><img src="/static/img/edit_icon.png" alt="Редактировать" style="width: 30px; height: 25px; margin-right: 5px;"></span>Редактировать</a>';
+        // }
+    }
+window.addEventListener('load', setLinkText);
+window.addEventListener('resize', setLinkText);
+</script>
 {% endblock %}
