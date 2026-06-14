@@ -396,19 +396,66 @@ def change_password():
     db_sess.commit()
     return jsonify({"message": "Пароль установлен"})
 
+#------------------------------------------Страница профиля пользователя------------------------------------------
+
 @app.route('/profile/<int:id>')
 def profile(id):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == id).first()
     if not current_user.is_authenticated:
-        return jsonify({"error":"Доступ запрещен"})
+        return jsonify({"error":"Доступ запрещен"}), 403
     if id != current_user.id:
-        return jsonify({"error":"Вы можете просматривать только свою страницу профиля"})
+        return jsonify({"error":"Вы можете просматривать только свою страницу профиля"}), 403
     if not user:
         return jsonify({"error": "Пользователь не найден"}), 404
 
     return render_template('user_profile.html', user=user)
 
+#--------------------------------------------Страница изменения данных пользователя------------------------------------
+@app.route('/edit_profile/<int:id>', methods=['GET'])
+def edit_profile(id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == id).first()
+    name = user.name
+    surname = user.surname
+    email = user.email
+    date = user.modified_date.strftime("%d.%m.%Y")
+    if not current_user.is_authenticated:
+        return jsonify({"error":"Доступ запрещен"}), 403
+    if id != current_user.id:
+        return jsonify({"error":"Вы можете просматривать только свою страницу профиля"}), 403
+    if not user:
+        return jsonify({"error": "Пользователь не найден"}), 404
+
+    return render_template('edit_profile.html', user=user, name=name, surname=surname, email=email, date=date)
+
+#--------------------------------------------Изменение данных пользователя-------------------------------
+@app.route('/edit_profile/<int:id>', methods=['POST'])
+def edit_profile_post(id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == id).first()
+    name = request.form.get('name', '')
+    surname = request.form.get('surname', '')
+    email = request.form.get('email', '')
+    if not email:
+        return jsonify({'error': 'Email не предоставлен'}), 400
+    if not name:
+        return jsonify({'error': 'Имя не предоставлено'}), 400
+    if not surname:
+        return jsonify({'error': 'Фамилия не предоставлена'}), 400
+
+    user_current_email = user.email
+    if email != user_current_email:
+        other = db_sess.query(User).filter(User.email == email).first()
+        if other:
+            return jsonify({'error': 'Пользователь с таким email уже существует'}), 400
+        user.is_verified = False
+
+    user.name = name
+    user.surname = surname
+    user.email = email
+    db_sess.commit()
+    return jsonify({"message": "Изменения успешно сохранены"}), 200
 
 
 
@@ -437,7 +484,8 @@ def neuro_request():
 
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "X-OpenRouter-Experimental-Metadata": "enabled"
+        "X-OpenRouter-Experimental-Metadata": "enabled",
+        'Content-Type': 'application/json'
     }
     # Тело запроса
     json = {

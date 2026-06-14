@@ -65,6 +65,9 @@
         -webkit-tap-highlight-color: transparent;
     }
     #begin-btn:focus{
+        outline: none;
+    }
+    #begin-btn:active{
         filter: brightness(90%);
         text-decoration: none;
         color: black;
@@ -72,11 +75,11 @@
     }
     @media (hover: hover){
         #begin-btn:hover{
-        background-color: #03d1e8;
-        box-shadow: 0 0 7px #03d1e8;
-        border: 1px solid #03d1e8;
-        border-radius: 10px;
-        transform: scale(1.05);
+            background-color: #03d1e8;
+            box-shadow: 0 0 7px #03d1e8;
+            border: 1px solid #03d1e8;
+            border-radius: 10px;
+            transform: scale(1.05);
         }
     }
     @media (max-width: 800px){
@@ -84,12 +87,6 @@
             max-width: 150px;
             min-width: 80px;
             font-size: 0.8rem;
-        }
-        #begin-btn:focus{
-            filter: brightness(90%);
-            transform: scale(0.95);
-            text-decoration: none;
-            color: black;
         }
         #begin-btn:active{
             filter: brightness(90%);

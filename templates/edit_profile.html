@@ -1,0 +1,498 @@
+{% extends "base.html" %}
+
+<!-- Важно: запрещаем индексацию личной страницы -->
+{% block extra_meta %}
+<meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+{% block content %}
+<meta charset="UTF-8">
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .background-image{
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        background-image: url("/static/img/error404bg.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        min-height: 100dvh;
+        min-height: -webkit-fill-available;
+        height: 100vh;
+        position: relative;
+    }
+    .content{
+        width: 100vw;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem 2rem;
+    }
+    .edit-profile-div{
+        width: 90%;
+        max-width: 1000px;
+        height: 700px;
+        border: 1px solid #1f2c44;
+        border-radius: 10px;
+        background-color: #13233c;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        padding: 1rem 1rem;
+    }
+    .edit-profile-text h1{
+        font-weight: 800;
+        font-size: 2rem;
+    }
+    .edit-profile-text p{
+        color: #d2d2d2;
+    }
+    .save-changes-div{
+        margin-top: 15px;
+        border: 1px solid #1f2c44;
+        border-radius: 10px;
+        background-color: #13233c;
+        width: 90%;
+        max-width: 1000px;
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0.5rem 1rem;
+    }
+    .save-changes-btn{
+        height: 50px;
+        width: 250px;
+        border: 1px solid #00E6FF;
+        border-radius: 10px;
+        background-color: #00E6FF;
+        box-shadow: 0 0 7px #00E6FF;
+        color: black;
+        font-weight: 800;
+        opacity: 0.5;
+        transition: transform 0.1s ease-in-out, filter 0.1s ease-in-out;
+        -webkit-tap-highlight-color: transparent;
+    }
+    @media (hover: hover){
+        .save-changes-btn:hover{
+            filter: brightness(90%);
+            transform: scale(1.05)
+        }
+    }
+    .save-changes-btn:focus{
+        outline: none;
+    }
+    .save-changes-btn:active{
+        outline: none;
+        transform: scale(0.95);
+        transition: transform 0.1s ease-in-out;
+    }
+    .edit-data{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+    .personal-data{
+        width: 50%;
+        border-right: 2px solid #1f2c44;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        margin: 1rem 0;
+        padding-right: 0.5rem;
+    }
+    .personal-data h4{
+        font-size: 1rem;
+        font-weight: 800;
+    }
+    .ava-div img{
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+    }
+    .personal-data p{
+        font-weight: 200;
+        margin: 0;
+        font-size: 1rem;
+        color: #d2d2d2;
+    }
+    .name-surname-email-div{
+        width: 100%;
+        margin: 0.5rem 0;
+        display: flex;
+        flex-direction: row;
+    }
+    .name-div{
+        width: calc(50% - 5px - 0.25rem);
+        display: flex;
+        flex-direction: column;
+        margin-right: 5px;
+    }
+    .surname-div{
+        width: calc(50% - 5px - 0.25rem);
+        display: flex;
+        flex-direction: column;
+        margin-left: 5px;
+    }
+    .input{
+        background-color: transparent;
+        border: 1px solid #c5c5c5;
+        box-shadow: 0 0 7px #c5c5c5;
+        border-radius: 10px;
+        outline: none;
+        width: 100%;
+        height: 40px;
+        color: white;
+        padding-left: 10px;
+    }
+    .input:focus{
+        border-color: #00E6FF;
+        box-shadow: 0 0 7px #00E6FF;
+    }
+    .security{
+        width: 50%;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        margin: 1rem;
+        margin-left: 1rem;
+    }
+    .security h4{
+        font-weight: 800;
+        font-size: 1rem;
+    }
+    .password-div{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        margin-bottom: 1rem;
+    }
+    .security p{
+        color: #d2d2d2;
+    }
+    .change-btn{
+        color: #d2d2d2;
+        background-color: transparent;
+        border: 1px solid #c5c5c5;
+        box-shadow: 0 0 7px #c5c5c5;
+        width: 200px;
+        height: 40px;
+        border-radius: 10px;
+        transition: transform 0.1s ease-in-out;
+    }
+    @media (hover: hover){
+        .change-btn:hover{
+            transform: scale(1.05);
+        }
+    }
+    .change-btn:focus{
+        outline: none;
+    }
+    .change-btn:active{
+        outline: none;
+        transform: scale(0.95);
+        transition: transform 0.1s ease-in-out;
+    }
+    .message{
+        font-size: 12px;
+        margin: 0;
+        margin-top: 5px;
+        color: white;
+    }
+    .account-div{
+        width: 100%;
+        height: 50px;
+        display: flex;
+        flex-direction: row;
+        margin-top: 0.5rem;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 3rem;
+    }
+    .account-div a{
+        font-size: 1rem;
+        color: white;
+        text-decoration: none;
+        display: flex;
+        opacity: 0.5;
+        height: 40px;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: auto;
+        transition: transform 0.1s ease-in-out;
+    }
+    .delete-account{
+        width: 200px;
+        height: 40px;
+        background-color: transparent;
+        color: red;
+        border: 1px solid red;
+        box-shadow: 0 0 7px rgb(255, 62, 62);
+        border-radius: 10px;
+        transition: transform 0.1s ease-in-out;
+        outline: none;
+        opacity: 0.9;
+    }
+    @media (hover:hover){
+        .delete-account:hover{
+            transform: scale(1.05);
+        }
+        .account-div a:hover{
+            text-decoration: none;
+            opacity: 0.7;
+        }
+    }
+    .account-div a:focus{
+        opacity: 1;
+        transform: scale(0.95);
+    }
+    .delete-account:focus{
+        outline: none;
+    }
+    .delete-account:active{
+        outline: none;
+        transform: scale(0.95);
+        transition: transform 0.1s ease-in-out;
+    }
+</style>
+<div class="background-image">
+    <div class="content">
+        <div class="edit-profile-div">
+            <div class="edit-profile-text">
+                <h1>Редактирование профиля</h1>
+                <p>Обновите свои личные данные</p>
+            </div>
+            <div class="edit-data">
+                <div class="personal-data">
+                    <h4>Аватар</h4>
+                    <div class="ava-div">
+                        <img src="/static/img/default_ava.png" alt="аватар">
+                    </div>
+                    <h4>Основная информация</h4>
+                    <div class="name-surname-email-div">
+                        <div class="name-div">
+                            <p>Имя</p>
+                            <input class="input" type="text" id="name-input" value="{{name}}" onchange="setBtnDisable()">
+                        </div>
+                        <div class="surname-div">
+                            <p>Фамилия</p>
+                            <input type="text" class="input" id="surname-input" value="{{surname}}" onchange="setBtnDisable()">
+                        </div>
+                    </div>
+                    <p>Email</p>
+                    <input type="email" class="input" id="email-input" value="{{email}}" onchange="setBtnDisable()">
+                    <p style="margin-top: 1rem; margin-bottom: 0.5rem;">Дата регистрации</p>
+                    <p>{{date}}</p>
+                </div>
+                <div class="security">
+                    <h4>Безопасность</h4>
+                    <div class="password-div">
+                        <p>Пароль</p>
+                        <button class="change-btn" id="change-password-btn">Изменить пароль</button>
+                        <p class="message" id="password-message"></p>
+                        <p class="message" id="timer"></p>
+                    </div>
+                    <h4>Управление аккаунтом</h4>
+                    <div class="account-div">
+                        <button class="delete-account" id="delete-account-btn">Удалить аккаунт</button>
+                        <a href="/logout" id="logout">Выйти<span><img src="/static/img/logout_icon.png" alt="Выйти" style="width: 25px; height: 23px; margin-left: 5px;"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="save-changes-div">
+            <button class="save-changes-btn" disabled="true" id="save-changes-btn">Сохранить изменения</button>
+            <p class="message" id="message"></p>
+        </div>
+    </div>
+</div>
+<script>
+    //Функция-таймер
+    function countdown(seconds, onTick, onComplete){
+        let remaining = seconds;
+
+        const interval = setInterval(() => {
+            if (remaining <= 0){
+                clearInterval(interval);
+                onComplete?.();
+            }
+            else {
+                remaining--;
+            onTick?.(remaining);
+            }
+        }, 1000)
+    }
+    function setBtnDisable(){
+        const message = document.getElementById("message");
+        const btn = document.getElementById("save-changes-btn");
+        if (!btn) return;
+        btn.disabled = false;
+        btn.style.opacity = "1";
+        btn.innerText = "Сохранить изменения";
+        message.innerText = '';
+    }
+    document.addEventListener("DOMContentLoaded", function(){
+        const saveBtn = document.getElementById("save-changes-btn");
+        const message = document.getElementById("message");
+        if (!saveBtn) return;
+        function setBtnDisable(){
+            saveBtn.disabled = false;
+            saveBtn.style.opacity = "1";
+            saveBtn.innerText = "Сохранить изменения";
+            message.innerText = '';
+        }
+        saveBtn.addEventListener("click", function(){
+            saveBtn.disabled = true;
+            saveBtn.style.opacity = "0.5";
+            saveBtn.innerText = "Сохранение...";
+
+            const nameInput = document.getElementById("name-input");
+            const surnameInput = document.getElementById("surname-input");
+            const emailInput = document.getElementById("email-input");
+            if (!nameInput || !emailInput || !surnameInput) return;
+
+            const name = nameInput.value;
+            const surname = surnameInput.value;
+            const email = emailInput.value;
+
+            if (!email){
+                message.innerText = "Введите email";
+                message.style.color = "red";
+                saveBtn.disabled = false;
+                saveBtn.style.opacity = "1";
+                return;
+            }
+            if (!name){
+                message.innerText = "Введите имя";
+                message.style.color = "red";
+                saveBtn.disabled = false;
+                saveBtn.style.opacity = "1";
+                return;
+            }
+            if (!surname){
+                message.innerText = "Введите фамилию";
+                message.style.color = "red";
+                saveBtn.disabled = false;
+                saveBtn.style.opacity = "1";
+                return;
+            }
+            const formData = new FormData();
+            formData.append("email", email);
+            formData.append("name", name);
+            formData.append("surname", surname);
+
+            fetch('/edit_profile/{{user.id}}', {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message){
+                    message.innerText = data.message;
+                    message.style.color = "green";
+                    saveBtn.innerText = "Сохранено";
+                }
+                else if (data.error){
+                    message.innerText = "Ошибка:" + data.error;
+                    message.style.color = "red";
+                    saveBtn.innerText = "Сохранить изменения";
+                    saveBtn.disabled = false;
+                    saveBtn.style.opacity = "1";
+                }
+            })
+            .catch(error => {
+                message.innerText = "Произошла ошибка при отправке";
+                message.style.color = "red";
+                saveBtn.disabled = false;
+                saveBtn.opacity = "1";
+                saveBtn.innerText = "Сохранить изменения";
+            })
+        });
+        const changePasswordBtn = document.getElementById("change-password-btn");
+        const passwordMessage = document.getElementById("password-message");
+        const timer = document.getElementById("timer");
+        if (!changePasswordBtn) return;
+        changePasswordBtn.addEventListener("click", function(){
+            changePasswordBtn.disabled = true;
+            changePasswordBtn.style.opacity = "0.5";
+            changePasswordBtn.innerText = "Отправка письма...";
+            
+            const userEmail = '{{email or ""}}';
+            if (!userEmail){
+                passwordMessage.innerText = "Ошибка: email не предоставлен";
+                passwordMessage.style.color = "red";
+                changePasswordBtn.disabled = false;
+                changePasswordBtn.opacity = "1";
+                changePasswordBtn.innerText = "Изменить пароль";
+                return;
+            }
+
+            const passwordFormData = new FormData();
+            passwordFormData.append("email", userEmail);
+
+            fetch("/send_password_email", {
+                method: "POST",
+                body: passwordFormData
+            })
+            .then(response => response.json())
+            .then(data =>{
+                if (data.message){
+                    passwordMessage.innerText = "Письмо с инструкцией по смене пароля было отправлено на почту.";
+                    passwordMessage.style.color = "green";
+                    changePasswordBtn.innerText = "Отправлено";
+                    //Таймер для повторной отправки
+                    countdown(
+                        30, 
+                        (remaining) => timer.innerText = `Отпраить повторно через ${remaining} сек`,
+                        () => {
+                            changePasswordBtn.disabled = false;
+                            changePasswordBtn.style.opacity = '1';
+                            changePasswordBtn.innerText = "Отправить еще раз";
+                            timer.innerText = '';
+                        }
+                    );
+                }
+                else if(data.error){
+                    passwordMessage.innerText = "Ошибка при отправке письма:" + data.error;
+                    passwordMessage.style.color = "red";
+                    //Таймер для повторной отправки
+                    countdown(
+                        10, 
+                        (remaining) => timer.innerText = `Отпраить повторно через ${remaining} сек`,
+                        () => {
+                            changePasswordBtn.disabled = false;
+                            changePasswordBtn.style.opacity = '1';
+                            changePasswordBtn.innerText = "Отправить письмо еще раз";
+                            timer.innerText = '';
+                            passwordMessage.innerText = '';
+                        }
+                    );
+                }
+            })
+            .catch(error => {
+                passwordMessage.innerText = "Произошла ошибка при отправке письма";
+                passwordMessage.style.color = "red";
+                changePasswordBtn.disabled = false;
+                changePasswordBtn.opacity = "1";
+                changePasswordBtn.innerText = "Отправить письмо еще раз";
+            })
+        });
+    });
+</script>
+{% endblock %}
